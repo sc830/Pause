@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-navigation/native": "^6.1.18",
-    "expo": "^51.0.37"
+    "expo": "^51.0.37",
+    "firebase": "^10.14.1"
   }
 }
