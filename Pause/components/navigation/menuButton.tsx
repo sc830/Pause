@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Text, StyleSheet, Pressable } from 'react-native';
 
-import settingsIcon from '../assets/images/settings.png';
+import settingsIcon from '../assets/images/menu.png';
 
 export default function menuButton(props: { onPress?: any; title?: String | undefined; }) {
   const { onPress, title = '' } = props;

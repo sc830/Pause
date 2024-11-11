@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import ContinueButton from '@/components/ContinueButton';
+import menuButton from '@/components/menuButton';
 
 export default function logsPage() {
   return (
@@ -12,7 +12,7 @@ export default function logsPage() {
       }}
     >
             <Text>This is the logs screen.</Text>
-            <ContinueButton/>
+            <menuButton/>
     </View>
   );
 }
