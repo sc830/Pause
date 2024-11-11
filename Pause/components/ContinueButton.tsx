@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     margin: 0,
-    //backgroundColor: '#4f7bbd',
+    backgroundColor: '#4f7bbd',
   },
   text: {
     fontSize: 16,
