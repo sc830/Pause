@@ -2,7 +2,9 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.18",
     "expo": "^51.0.37",
-    "firebase": "^10.14.1"
+    "firebase": "^10.14.1",
+    "typescript": "~5.3.3",
+    "@types/react": "~18.2.79"
   },
   "devDependencies": {
     "firebase-tools": "^13.22.0"

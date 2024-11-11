@@ -1,0 +1,43 @@
+This folder contains two different implementations of a basic button/pressable component.
+
+Both are equally valid and just have different syntax. (:
+
+Component files can be .js or .tsx - .js is generally easier, .tsx has more error-checking stuff.
+
+Most of the difference we'll encounter will be that .tsx doesn't like "any" data types, which is the default for a lot of .js files.
+Basically, if you specify a variable and don't explicitly assign it a type, JS will assign it the 'any' type that says it can have any value.
+TSX wants a value type. You can do this by making an interface, which is basically just a data structure like a struct or class with member
+variables. For example:
+
+JS won't like this:
+
+const Button = ({
+  onPress,
+  onLongPress,
+  title,
+  style,
+  etc }
+
+
+
+So you could create this interface:
+
+interface ButtonProps {
+  onPress: () => void;
+  onLongPress?: () => void;
+  title: string;
+  style?: StyleProp<ViewStyle>;
+  etc }
+
+Which defines a type for each parameter/argument/whatever you want to call it that Button expects when it's created.
+(Void because onPress usually won't return a value, title should be a string, etc.)
+*Note: style has a ? because this value isn't required to create a "button." Basically, this says: "style" might not exist,
+but if it does, it should be a StyleProp<ViewStyle>.
+
+Then, you'd replace
+const Button = ({
+  onPress, etc }
+with
+const Button: React.FC<ButtonProps> = ({
+  onPress, etc }
+which tells TSX that the "props" should be in the format of "ButtonProps".
