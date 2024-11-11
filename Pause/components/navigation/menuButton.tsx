@@ -3,7 +3,7 @@ import { Image, Text, StyleSheet, Pressable } from 'react-native';
 
 import settingsIcon from '../assets/images/settings.png';
 
-export default function ContinueButton(props: { onPress?: any; title?: String | undefined; }) {
+export default function menuButton(props: { onPress?: any; title?: String | undefined; }) {
   const { onPress, title = '' } = props;
   return (
     <Pressable style={styles.button} onPress={onPress}>
