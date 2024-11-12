@@ -6,7 +6,7 @@ export default function MonthlyProgressButton(props: { onPress?: any; title?: St
   const { onPress, style } = props;
   return (
     <Pressable style={[styles.button, style]} onPress={onPress}>
-      <Image source={settingsIcon} style={{ width: 50, height: 50 }} resizeMode="contain" />
+      <Image source={settingsIcon} style={{ width: 40, height: 40 }} resizeMode="contain" />
     </Pressable>
   );
 }
