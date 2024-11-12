@@ -4,6 +4,7 @@ import MenuButton from '@/components/MenuButton';
 import SettingsButton from '@/components/SettingsButton';
 import JournalButton from '@/components/JournalButton';
 import MonthlyProgressButton from '@/components/MonthlyProgressButton';
+import DateButton from '@/components/DateButton';
 
 export default function LogsPage() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -17,7 +18,9 @@ export default function LogsPage() {
     <View style={styles.container}>
       <Text style={styles.headerText}>Choose A Date to View Past Responses and Journal Entries:</Text>
       <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
-    
+
+      {/* Date Selection Button */}
+      <DateButton onPress={() => console.log('Date Button Pressed')} />
 
       {/* Dropdown menu */}
       {showDropdown && (
@@ -37,29 +40,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   headerText: {
     position: 'absolute',
-    top: 40,            
+    top: 40,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
   },
-
   menuButton: {
     position: 'absolute',
-    top: 20,         // Distance from the top of the screen
-    right: 20,       // Distance from the right edge of the screen
+    top: 20,
+    right: 20,
   },
   dropdown: {
     position: 'absolute',
-    top: 80,          // Position dropdown below menu button
+    top: 80,
     right: 20,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
-    elevation: 5,     // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
