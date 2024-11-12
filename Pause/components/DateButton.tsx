@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 20,
     backgroundColor: '#4f7bbd',
+    //position: 'absolute',
+    top: 100,
+    //textAlign: 'center',
+    //fontSize: 20,
+    //fontWeight:
   },
   text: {
     fontSize: 18,

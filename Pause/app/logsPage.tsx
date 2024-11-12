@@ -52,9 +52,10 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
   },
+  
   dropdown: {
     position: 'absolute',
-    top: 80,
+    top: 60,
     right: 20,
     backgroundColor: 'white',
     borderRadius: 10,
