@@ -1,4 +1,4 @@
-/* colors.ts
+/* Colors.ts
 
   Props:  none
 
