@@ -2,7 +2,7 @@
     Functions:
         Prompts user to practice gratitude
         Requires user to input three things they are grateful for
-        AddButton is used to insert more text boxes if desired
+        AddButton is used to insert more text boxes if needed
         Continue button is used to navigate to the next screen
 
     Example reference: https://react.dev/reference/react/useState#updating-state-based-on-the-previous-state
