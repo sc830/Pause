@@ -19,10 +19,12 @@
 */
 
 import React from 'react';
-import { Image, Text, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView, Dimensions, Text, StyleSheet, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import colors from '@/constants/Colors'
-import reusedStyles from '@/constants/reusedStyles'
+import colors from '@/constants/Colors';
+import reusedStyles from '@/constants/reusedStyles';
+import values from '@/constants/Values';
 
 // types of expected props
 interface ContinueButtonProps {
@@ -34,25 +36,30 @@ interface ContinueButtonProps {
 const ContinueButton: React.FC<ContinueButtonProps> = ({
   onPress,
   text = "Continue",
-  color = colors.yellow
+  color = colors.yellow,
 }) => {
+  const { width, height } = Dimensions.get('window');
+  const insets = useSafeAreaInsets();                 // Get safe area insets
+  const buttonHeight = height*.04 + insets.top;        // 10% screen height + safe area top inset
+  const buttonWidth = width*values.componentWidth;                       // 90% width of screen
+  const leftPosition = (width*.05)/2;                  // compute left margin
+
   return (
-    <Pressable style={[styles.button, {backgroundColor: color}]} onPress={onPress}>
-      <Text style={reusedStyles.textStyle}>{text}</Text>
+    <Pressable style={[styles.button, {backgroundColor: color, height: buttonHeight, width: buttonWidth, position: 'absolute', bottom:insets.bottom, marginBottom: 10}]}     onPress={onPress}>
+      <Text style={reusedStyles.buttonTextStyle}>{text}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'stretch',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 100,
-    borderRadius: 20,
+    padding: 20,
+    borderRadius: values.borderRadius,
     elevation: 3,
-    height: 100,
-    width: 100,
     margin: 0,
   }
 });
