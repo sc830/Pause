@@ -10,7 +10,7 @@
   Functions:  allow access to standard styles by name
 
   Usage: add import statement in any other file and reference colors by name
-    import reusedStyles from '../constants/reusedStyles.ts'
+    import reusedStyles from '../constants/reusedStyles'
       style={reusedStyles.menuButton} 
       OR style={[reusedStyles.menuButton, {backgroundColor: '#ffffff'}]}
       OR style={[reusedStyles.menuButton, differentStyle, {backgroundColor:'#ffffff'}]
@@ -21,11 +21,13 @@
 */
 
 import {StyleSheet} from 'react-native';
+import colors from '@/constants/Colors'
 
 const reusedStyles = StyleSheet.create({
-  headerStyle: {
+  headerTextStyle: {
     fontSize: 36,
     marginBottom: 48,
+    color: colors.black,
   },
   textInputStyle: {
     backgroundColor: '#cedcf2',
@@ -38,9 +40,18 @@ const reusedStyles = StyleSheet.create({
   textStyle: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: 'white',
+    color: colors.black,
+  },
+  buttonTextStyle: {
+    fontSize: 20,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+    lineHeight: 40,
+    fontWeight: 400,
+    letterSpacing: 0.55,
+    color: colors.black,
   },
   menuButton: {
     alignItems: 'center',

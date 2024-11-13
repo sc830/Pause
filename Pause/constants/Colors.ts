@@ -21,7 +21,10 @@ const tintColorDark = '#fff';
 const colors = {
   yellow: '#FAF0DA',
   green: '#C9E4DE',
-  blue: 'A9D1D9',
+  blue: '#A9D1D9',
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#757575',
 
   // dark and light full component styles
   light: {

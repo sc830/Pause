@@ -21,8 +21,8 @@
 import React from 'react';
 import { Image, Text, StyleSheet, Pressable } from 'react-native';
 
-import colors from '../constants/Colors'
-import reusedStyles from '../constants/reusedStyles'
+import colors from '@/constants/Colors'
+import reusedStyles from '@/constants/reusedStyles'
 
 // types of expected props
 interface ContinueButtonProps {
