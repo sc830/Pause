@@ -66,7 +66,7 @@ interface TextBoxProps {
         <TextInput
             style={[reusedStyles.textInputStyle, {height: boxHeight, width: boxWidth, backgroundColor: color}]}
             placeholder="Tap here to add text" 
-            placeholderTextColor='#b6b7b8'
+            placeholderTextColor={colors.gray}
             multiline
         />
     </KeyboardAvoidingView>
