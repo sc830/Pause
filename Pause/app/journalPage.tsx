@@ -1,21 +1,38 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import TextBox from '../components/TextBox';
 import ContinueButton from '../components/ContinueButton';
 
-const Index: React.FC = () => {
+const JournalPage: React.FC = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Create a New Journal Entry</Text>
+
+      {/* TextBox Component */}
+      <TextBox
+        boxHeight={20} // Adjust height to fit your layout
+        boxWidth={500} // Dynamic width as percentage
+        color="#f8f9fa" // Light background color
+      />
+
+      {/* Continue Button */}
       <ContinueButton onPress={() => console.log('Continue button pressed')} />
     </View>
   );
 };
 
-export default Index;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
+
+export default JournalPage;

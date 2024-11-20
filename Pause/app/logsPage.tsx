@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
   },
 
   dateButton: {
-    marginVertical: 10, // Add vertical spacing between buttons
-    width: '100%', // Optional: Set a consistent width for the buttons
-    alignSelf: 'center', // Center the buttons horizontally
+    marginVertical: 10,
+    width: '100%', 
+    alignSelf: 'center', 
   },
 });
