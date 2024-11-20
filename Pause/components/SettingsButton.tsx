@@ -1,26 +1,34 @@
 import React from 'react';
-import { Image, StyleSheet, Pressable } from 'react-native';
-import settingsIcon from '../assets/images/settings.png';
+import { Image, Pressable } from 'react-native';
 
-export default function SettingsButton(props: { onPress?: any; title?: String | undefined; style?: object }) {
-  const { onPress, style } = props;
-  return (
-    <Pressable style={[styles.button, style]} onPress={onPress}>
-      <Image source={settingsIcon} style={{ width: 40, height: 40 }} resizeMode="contain" />
-    </Pressable>
-  );
+import reusedStyles from '../constants/reusedStyles'; // Import reused styles
+import settingsIcon from '../assets/images/settings.png'; // Import settings icon
+
+interface SettingsButtonProps {
+  onPress?: () => void; // Explicit type for onPress
+  style?: object; // Optional style override
+  altText?: string;
 }
 
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    elevation: 3,
-    height: 50,
-    width: 50,
-    //backgroundColor: '#4f7bbd',
-  },
-});
+const SettingsButton: React.FC<SettingsButtonProps> = ({ 
+  onPress, 
+  style,
+  altText = "Whoops, we forgot to fill in the alt text.",
+}) => {
+  return (
+    <Pressable
+      style={[reusedStyles.settingsButton, style]} // Use settingsButton style from reusedStyles
+      onPress={onPress}
+    >
+      <Image
+        source={settingsIcon}
+        style={{ width: 40, height: 40 }}
+        resizeMode="contain"
+        accessible
+        accessibilityLabel={altText}
+      />
+    </Pressable>
+  );
+};
+
+export default SettingsButton;

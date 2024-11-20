@@ -19,12 +19,10 @@
 */
 
 import React from 'react';
-import { Image, Text, StyleSheet, Pressable } from 'react-native';
+import { Text, Pressable } from 'react-native';
 
-import colors from '../constants/Colors'
-import reusedStyles from '../constants/reusedStyles'
+import reusedStyles from '../constants/reusedStyles';
 
-// types of expected props
 interface ContinueButtonProps {
   onPress?: () => void;
   text?: string;
@@ -34,27 +32,16 @@ interface ContinueButtonProps {
 const ContinueButton: React.FC<ContinueButtonProps> = ({
   onPress,
   text = "Continue",
-  color = colors.yellow
+  color = '#f1c40f', // Default to yellow-like color
 }) => {
   return (
-    <Pressable style={[styles.button, {backgroundColor: color}]} onPress={onPress}>
+    <Pressable
+      style={[reusedStyles.continueButton, { backgroundColor: color }]}
+      onPress={onPress}
+    >
       <Text style={reusedStyles.textStyle}>{text}</Text>
     </Pressable>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 100,
-    borderRadius: 20,
-    elevation: 3,
-    height: 100,
-    width: 100,
-    margin: 0,
-  }
-});
-
-
+export default ContinueButton;
