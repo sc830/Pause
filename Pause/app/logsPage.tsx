@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import MenuButton from '@/components/MenuButton';
 import DateButton from '@/components/DateButton';
 
-const db = getFirestore();
+// Uncomment and configure these imports when Firebase is connected
+// import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+// const db = getFirestore();
 
 export default function LogsPage() {
   const [dates, setDates] = useState<string[]>([]); // Store dates
   const [activities, setActivities] = useState<any[]>([]); // Store activities for selected date
 
-  // Fetch dates from Firestore on load
+  // Uncomment this useEffect when Firebase is ready
+  /*
   useEffect(() => {
     const fetchDates = async () => {
       try {
@@ -34,8 +36,10 @@ export default function LogsPage() {
 
     fetchDates();
   }, []);
+  */
 
-  // Example: Save a new session to Firestore (triggered manually here)
+  // Example: Save a new session to Firestore (Uncomment and use when Firebase is ready)
+  /*
   const saveSession = async () => {
     try {
       await addDoc(collection(db, 'userActivity'), {
@@ -47,6 +51,13 @@ export default function LogsPage() {
       console.error('Error saving session:', error);
     }
   };
+  */
+
+  // Temporary placeholder dates for testing until Firebase is connected
+  useEffect(() => {
+    const placeholderDates = ['2024-11-19', '2024-11-20', '2024-11-21'];
+    setDates(placeholderDates);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -61,6 +72,7 @@ export default function LogsPage() {
           <DateButton
             date={item}
             onPress={() => console.log(`View activities for ${item}`)}
+            style={styles.dateButton}
           />
         )}
         contentContainerStyle={styles.dateButtonList}
@@ -86,8 +98,14 @@ const styles = StyleSheet.create({
     right: 20,
   },
   dateButtonList: {
-    marginTop: 50,
+    marginTop: -90,
     width: '100%',
     alignItems: 'center',
+  },
+
+  dateButton: {
+    marginVertical: 10, // Add vertical spacing between buttons
+    width: '100%', // Optional: Set a consistent width for the buttons
+    alignSelf: 'center', // Center the buttons horizontally
   },
 });

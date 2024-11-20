@@ -41,7 +41,7 @@ const reusedStyles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 30,
     borderRadius: 20,
-    elevation: 20,
+    elevation: 10,
     backgroundColor: '#4f7bbd', // Same color as original DateButton
     top: 100,
   },

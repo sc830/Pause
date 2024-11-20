@@ -1,18 +1,19 @@
 
 import React from 'react';
-import { Text, Pressable } from 'react-native';
+import { Text, Pressable,StyleProp, ViewStyle } from 'react-native';
 
 import reusedStyles from '../constants/reusedStyles'; // Import reused styles
 
 interface DateButtonProps {
   onPress: () => void; // Explicit type for onPress
   date: string; // Date for the button
+  style?: StyleProp<ViewStyle>; 
 }
 
-const DateButton: React.FC<DateButtonProps> = ({ onPress, date }) => {
+const DateButton: React.FC<DateButtonProps> = ({ onPress, date, style }) => {
   return (
     <Pressable
-      style={[reusedStyles.dateButton]} // Use dateButton style from reusedStyles
+      style={[reusedStyles.dateButton, style]} // Use dateButton style from reusedStyles
       onPress={onPress}
     >
       <Text style={reusedStyles.textStyle}>{date}</Text> {/* Display the date */}
