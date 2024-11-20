@@ -1,35 +1,70 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import MenuButton from '@/components/MenuButton';
-import SettingsButton from '@/components/SettingsButton';
-import JournalButton from '@/components/JournalButton';
-import MonthlyProgressButton from '@/components/MonthlyProgressButton';
 import DateButton from '@/components/DateButton';
 
-export default function LogsPage() {
-  const [showDropdown, setShowDropdown] = useState(false);
+const db = getFirestore();
 
-  // Toggle dropdown visibility
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+export default function LogsPage() {
+  const [dates, setDates] = useState<string[]>([]); // Store dates
+  const [activities, setActivities] = useState<any[]>([]); // Store activities for selected date
+
+  // Fetch dates from Firestore on load
+  useEffect(() => {
+    const fetchDates = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'userActivity'));
+        const fetchedDates: string[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.timestamp) {
+            const date = new Date(data.timestamp.toDate()); // Convert Firestore Timestamp
+            const formattedDate = date.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+            if (!fetchedDates.includes(formattedDate)) {
+              fetchedDates.push(formattedDate);
+            }
+          }
+        });
+        setDates(fetchedDates);
+      } catch (error) {
+        console.error('Error fetching dates:', error);
+      }
+    };
+
+    fetchDates();
+  }, []);
+
+  // Example: Save a new session to Firestore (triggered manually here)
+  const saveSession = async () => {
+    try {
+      await addDoc(collection(db, 'userActivity'), {
+        details: 'User completed an activity.',
+        timestamp: serverTimestamp(), // Automatically set the date/time
+      });
+      console.log('Session saved!');
+    } catch (error) {
+      console.error('Error saving session:', error);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Choose A Date to View Past Responses and Journal Entries:</Text>
-      <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
+      <Text style={styles.headerText}>Choose A Date to View Past Responses:</Text>
+      <MenuButton style={styles.menuButton} onPress={() => console.log('Menu Pressed')} />
 
-      {/* Date Selection Button */}
-      <DateButton onPress={() => console.log('Date Button Pressed')} />
-
-      {/* Dropdown menu */}
-      {showDropdown && (
-        <View style={styles.dropdown}>
-          <SettingsButton onPress={() => console.log('Settings Pressed')} />
-          <JournalButton onPress={() => console.log('Journal Pressed')} />
-          <MonthlyProgressButton onPress={() => console.log('Monthly Progress Pressed')} />
-        </View>
-      )}
+      {/* Render Date Buttons */}
+      <FlatList
+        data={dates}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <DateButton
+            date={item}
+            onPress={() => console.log(`View activities for ${item}`)}
+          />
+        )}
+        contentContainerStyle={styles.dateButtonList}
+      />
     </View>
   );
 }
@@ -41,29 +76,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    position: 'absolute',
-    top: 40,
-    textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 20,
   },
   menuButton: {
     position: 'absolute',
     top: 20,
     right: 20,
   },
-  
-  dropdown: {
-    position: 'absolute',
-    top: 60,
-    right: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 10,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+  dateButtonList: {
+    marginTop: 50,
+    width: '100%',
+    alignItems: 'center',
   },
 });
