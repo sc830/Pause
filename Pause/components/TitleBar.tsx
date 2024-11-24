@@ -1,14 +1,26 @@
+/*  TitleBar.tsx
+
+  Props: 
+
+  Exports: 
+
+  Functions:  
+
+  Usage:
+
+  References:
+  
+*/
 //const { width, height } = Dimensions.get('window');
 //import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // style fixes
+//#endregion
 
 import React, { useState } from 'react';
 import { View, SafeAreaView, Dimensions, StyleSheet, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import colors from '@/constants/Colors';
-import reusedStyles from '@/constants/reusedStyles';
-import values from '@/constants/Values';
+import { colors, reusedStyles, values } from '@/constants';
 
 // types of expected props
 interface HeaderProps {

@@ -15,18 +15,20 @@
     Added interface/props from ChatGPT for troubleshooting
 */
 
-// Values.ts
-
 // Define the interface for the values object
 interface Values {
   borderRadius: number;
   componentWidth: number;
+  confirmButtonHeight: number;
+  titleBarHeight: number;
 }
 
 // Define and export the values object with the correct type
 const values: Values = {
   borderRadius: 15,
   componentWidth: 0.95,
+  confirmButtonHeight: .04,
+  titleBarHeight: .1,
 };
 
 export default values;

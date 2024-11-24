@@ -7,7 +7,7 @@
   Functions:  allow access to standard colors by name
 
   Usage: add import statement in any other file and reference colors by name
-    import colors from '../constants/Colors'
+    import colors from '@/constants/Colors'
     style={{ backgroundColor: colors.yellow }}
 
   References:
