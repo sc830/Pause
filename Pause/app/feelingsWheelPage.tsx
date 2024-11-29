@@ -1,46 +1,105 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 
-export default function FeelingsWheelPage() {
+import wheelImage from '../assets/images/feelingsWheel.jpg'; // Image path
+import ContinueButton from '../components/ContinueButton'; // Import the Continue Button component
+
+const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
 
-  // Reset selections
   const resetSelection = () => {
     setSelectedEmotion(null);
     setSelectedSubFeeling(null);
     setFinalFeeling(null);
   };
 
+  const handleContinue = () => {
+    if (finalFeeling) {
+      console.log(`Proceeding with selected feeling: ${finalFeeling}`);
+    } else {
+      console.log('Please select a feeling before continuing.');
+    }
+  };
+
+  const emotions = {
+    Happy: {
+      Playful: ['Aroused', 'Cheeky'],
+      Content: ['Free', 'Joyful'],
+      Interested: ['Curious', 'Inquisitive'],
+      Proud: ['Successful', 'Confident'],
+      Accepted: ['Respected', 'Valued'],
+      Powerful: ['Courageous', 'Creative'],
+      Peaceful: ['Loving', 'Thankful'],
+      Trusting: ['Sensitive', 'Intimate'],
+      Optimistic: ['Hopeful', 'Inspired'],
+    },
+    Sad: {
+      Lonely: ['Isolated', 'Abandoned'],
+      Vulnerable: ['Victimized', 'Fragile'],
+      Despair: ['Grief', 'Powerless'],
+      Guilty: ['Ashamed', 'Remorseful'],
+      Depressed: ['Empty', 'Inferior'],
+      Hurt: ['Disappointed', 'Embarrassed'],
+    },
+    Disgusted: {
+      Disapproving: ['Judgmental', 'Embarrassed'],
+      Disappointed: ['Appalled', 'Revolted'],
+      Awful: ['Nauseated', 'Detestable'],
+      Repelled: ['Horrified', 'Hesitant'],
+    },
+    Angry: {
+      'Let down': ['Betrayed', 'Resentful'],
+      Humiliated: ['Disrespected', 'Ridiculed'],
+      Bitter: ['Indignant', 'Violated'],
+      Mad: ['Furious', 'Jealous'],
+      Aggressive: ['Provoked', 'Hostile'],
+      Frustrated: ['Infuriated', 'Annoyed'],
+      Distant: ['Withdrawn', 'Numb'],
+      Critical: ['Skeptical', 'Dismissive'],
+    },
+    Fearful: {
+      Scared: ['Helpless', 'Frightened'],
+      Anxious: ['Overwhelmed', 'Worried'],
+      Insecure: ['Inadequate', 'Inferior'],
+      Weak: ['Worthless', 'Insignificant'],
+      Rejected: ['Excluded', 'Persecuted'],
+      Threatened: ['Nervous', 'Exposed'],
+    },
+    Bad: {
+      Bored: ['Indifferent', 'Apathetic'],
+      Busy: ['Pressured', 'Rushed'],
+      Stressed: ['Overwhelmed', 'Out of Control'],
+      Tired: ['Sleepy', 'Unfocused'],
+    },
+    Surprised: {
+      Startled: ['Shocked', 'Dismayed'],
+      Confused: ['Disillusioned', 'Perplexed'],
+      Amazed: ['Astonished', 'Awe'],
+      Excited: ['Eager', 'Energetic'],
+    },
+  };
+
   return (
     <View style={styles.container}>
-      {/* Display the Feelings Wheel image */}
       <Image
-        source={require('./Feelings+Wheel_Color.jpg')} // Replace with the path to your image
+        source={wheelImage}
         style={styles.wheelImage}
         resizeMode="contain"
       />
-
-      {/* Instruction or final selection */}
-      {!finalFeeling ? (
-        <Text style={styles.instruction}>
-          {selectedEmotion
+      <Text style={styles.instruction}>
+        {!finalFeeling
+          ? selectedEmotion
             ? selectedSubFeeling
               ? `Choose a deeper feeling for "${selectedSubFeeling}"`
               : `Choose a feeling related to "${selectedEmotion}"`
-            : 'Choose an emotion from the center of the wheel'}
-        </Text>
-      ) : (
-        <Text style={styles.instruction}>
-          You selected: {finalFeeling}. Press Reset to start over.
-        </Text>
-      )}
-
-      {/* Buttons for selecting emotions, sub-feelings, and deeper feelings */}
+            : 'Choose an emotion from the center of the wheel'
+          : `You selected: ${finalFeeling}. Press Reset to start over.`}
+      </Text>
       <View style={styles.buttonsContainer}>
         {!selectedEmotion &&
-          ['Angry', 'Happy', 'Sad', 'Disgusted', 'Surprised', 'Bad', 'Fearful'].map((emotion) => (
+          Object.keys(emotions).map((emotion) => (
             <Pressable
               key={emotion}
               style={styles.button}
@@ -50,49 +109,27 @@ export default function FeelingsWheelPage() {
             </Pressable>
           ))}
         {selectedEmotion && !selectedSubFeeling &&
-          (selectedEmotion === 'Angry'
-            ? ['Frustrated', 'Mad', 'Aggressive']
-            : selectedEmotion === 'Happy'
-            ? ['Content', 'Proud', 'Joyful']
-            : selectedEmotion === 'Sad'
-            ? ['Hurt', 'Lonely', 'Depressed']
-            : selectedEmotion === 'Disgusted'
-            ? ['Disapproving', 'Disappointed', 'Awful']
-            : selectedEmotion === 'Surprised'
-            ? ['Shocked', 'Confused', 'Amazed']
-            : selectedEmotion === 'Bad'
-            ? ['Stressed', 'Tired', 'Bored']
-            : ['Scared', 'Anxious', 'Insecure']
-          ).map((subFeeling) => (
-            <Pressable
-              key={subFeeling}
-              style={styles.button}
-              onPress={() => setSelectedSubFeeling(subFeeling)}
-            >
-              <Text style={styles.buttonText}>{subFeeling}</Text>
-            </Pressable>
-          ))}
+          Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
+            (subFeeling) => (
+              <Pressable
+                key={subFeeling}
+                style={styles.button}
+                onPress={() => setSelectedSubFeeling(subFeeling)}
+              >
+                <Text style={styles.buttonText}>{subFeeling}</Text>
+              </Pressable>
+            )
+          )}
         {selectedSubFeeling && !finalFeeling &&
-          (selectedSubFeeling === 'Frustrated'
-            ? ['Bitter', 'Annoyed']
-            : selectedSubFeeling === 'Content'
-            ? ['Satisfied', 'Relaxed']
-            : selectedSubFeeling === 'Hurt'
-            ? ['Embarrassed', 'Abandoned']
-            : selectedSubFeeling === 'Disapproving'
-            ? ['Judgmental', 'Dismissive']
-            : selectedSubFeeling === 'Shocked'
-            ? ['Astonished', 'Dismayed']
-            : selectedSubFeeling === 'Stressed'
-            ? ['Overwhelmed', 'Anxious']
-            : ['Nervous', 'Weak']
-          ).map((finalFeelingOption) => (
+          emotions[selectedEmotion as keyof typeof emotions][
+            selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
+          ].map((deeperFeeling) => (
             <Pressable
-              key={finalFeelingOption}
+              key={deeperFeeling}
               style={styles.button}
-              onPress={() => setFinalFeeling(finalFeelingOption)}
+              onPress={() => setFinalFeeling(deeperFeeling)}
             >
-              <Text style={styles.buttonText}>{finalFeelingOption}</Text>
+              <Text style={styles.buttonText}>{deeperFeeling}</Text>
             </Pressable>
           ))}
         {finalFeeling && (
@@ -101,41 +138,55 @@ export default function FeelingsWheelPage() {
           </Pressable>
         )}
       </View>
+      <View style={styles.continueButtonContainer}>
+        <ContinueButton onPress={handleContinue} />
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingTop: 20,
   },
   wheelImage: {
     width: '90%',
-    height: '50%',
+    height: '70%',
+    marginBottom: 10,
   },
   instruction: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 20,
+    marginVertical: 40,
     textAlign: 'center',
   },
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    marginBottom: 20,
   },
   button: {
     backgroundColor: '#4f7bbd',
-    padding: 10,
-    margin: 5,
-    borderRadius: 8,
+    padding: 15,
+    margin: 8,
+    borderRadius: 10,
+    minWidth: 120,
+    alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
     textAlign: 'center',
   },
+  continueButtonContainer: {
+    marginTop: 30, // Add spacing between the last button and the Continue button
+  },
 });
+
+export default FeelingsWheelPage;

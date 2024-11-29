@@ -1,3 +1,13 @@
+/*  journalPage.tsx
+
+    Screen 4
+
+    Functions: 
+        Prompts user to write a journal entry.
+        Requires user input in TextBox
+        Continue button is used to navigate to the next screen
+*/
+
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TextBox from '../components/TextBox';

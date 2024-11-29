@@ -1,3 +1,12 @@
+/*  logsPage.tsx
+
+    Screen 5
+
+    Functions: 
+        Allows User to View App Usage History
+        Requires user to slecet a date of interest
+*/
+
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import MenuButton from '@/components/MenuButton';
