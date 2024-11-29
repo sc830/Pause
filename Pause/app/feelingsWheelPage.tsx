@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 
-import wheelImage from '../assets/images/feelingsWheel.jpg'; // Image path
-import ContinueButton from '../components/ContinueButton'; // Import the Continue Button component
-
+import wheelImage from '../assets/images/feelingsWheel.jpg'; 
+import ContinueButton from '../components/ContinueButton'; 
 const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   continueButtonContainer: {
-    marginTop: 30, // Add spacing between the last button and the Continue button
+    marginTop: 30, 
   },
 });
 
