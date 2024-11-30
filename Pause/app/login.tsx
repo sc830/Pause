@@ -66,6 +66,7 @@ export default function Index() {
                       buttonWidth={600}
                       onPress={() => {
                           signIn(state.email, state.password)
+                          // add navigation to next page here
                       }}
                   />
                 </View>
@@ -84,7 +85,7 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-                    <Text>Edit app/index.tsx to edit this screen.</Text>
+                    <Text>Hey, you logged in! Good for you.</Text>
 
             </View>
           </AuthProvider>
