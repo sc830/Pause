@@ -40,7 +40,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__traverse": "^7.20.6",
+    "@types/hammerjs": "^2.0.46",
     "@types/jest": "^29.5.12",
+    "@types/jsdom": "^21.1.7",
     "@types/react": "~18.2.45",
     "@types/react-native": "^0.73.0",
     "@types/react-test-renderer": "^18.0.7",
