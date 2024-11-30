@@ -9,11 +9,13 @@
 
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 import AddButton from "@/components/AddButton";
 
 export default function Gratitude() {
+  const router = useRouter(); // Hook for navigation
   const [textInputs, setTextInputs] = useState<string[]>(["", "", ""]);
 
   const handleAddTextBox = () => {
@@ -28,13 +30,14 @@ export default function Gratitude() {
 
   const handleContinue = () => {
     console.log("Gratitude List:", textInputs);
+    router.push("/journalPage"); // Navigate to the Journal Page
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>List three things that you are grateful for:</Text>
       <Text style={styles.subHeader}>Click the plus button if you can think of more.</Text>
-      
+
       {/* Scrollable area for text boxes and Add Button */}
       <ScrollView contentContainerStyle={styles.scrollContent} style={styles.scrollView}>
         {textInputs.map((input, index) => (
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 20,
     textAlign: "center",
   },
   subHeader: {

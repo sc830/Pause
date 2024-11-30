@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
+import { useRouter } from 'expo-router'; // Import useRouter for navigation
 
-import wheelImage from '../assets/images/feelingsWheel.jpg'; 
-import ContinueButton from '../components/ContinueButton'; 
+import wheelImage from '../assets/images/feelingsWheel.jpg';
+import ContinueButton from '../components/ContinueButton';
+
 const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
+
+  const router = useRouter(); // Hook for navigation
 
   const resetSelection = () => {
     setSelectedEmotion(null);
@@ -17,6 +21,7 @@ const FeelingsWheelPage: React.FC = () => {
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
+      router.push('/grounding'); // Navigate to the Grounding Page
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
   instruction: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 40,
+    marginVertical: 10,
     textAlign: 'center',
   },
   buttonsContainer: {
@@ -184,7 +189,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   continueButtonContainer: {
-    marginTop: 30, 
+    marginTop: 100,
+    alignSelf: 'stretch',
+    alignItems: 'center',
   },
 });
 

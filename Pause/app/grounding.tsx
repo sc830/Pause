@@ -7,13 +7,15 @@
         Requires user input in multiple TextBoxes.
         Continue button is used to navigate to the next screen.
 */
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router'; // Import useRouter for navigation
 import TextBox from '../components/TextBox';
 import ContinueButton from '../components/ContinueButton';
 
 const Grounding: React.FC = () => {
+  const router = useRouter(); // Hook for navigation
+
   const groundingQuestions = [
     'Can you name five things you can see right now?',
     'What are four things you can touch?',
@@ -37,7 +39,7 @@ const Grounding: React.FC = () => {
   // Handle Continue button press
   const handleContinue = () => {
     console.log('User Responses:', responses); // Log all responses
-    // Add navigation logic here if needed
+    router.push('/gratitude'); // Navigate to the Gratitude page
   };
 
   return (
@@ -67,7 +69,7 @@ const Grounding: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Aligns content at the top
     alignItems: 'center',
     paddingHorizontal: 20,
   },
@@ -75,6 +77,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    marginTop: 40, // Adds space from the top of the screen
+    textAlign: 'center',
   },
   questionContainer: {
     marginBottom: 20,

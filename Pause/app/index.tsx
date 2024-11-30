@@ -1,8 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { useRouter } from 'expo-router'; // Use the router from Expo Router
 import ContinueButton from '../components/ContinueButton';
 
 const Index: React.FC = () => {
+  const router = useRouter(); // Hook for navigation
+
   return (
     <View
       style={{
@@ -12,8 +15,8 @@ const Index: React.FC = () => {
         alignItems: 'center',
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-      <ContinueButton onPress={() => console.log('Continue button pressed')} />
+      <Text>Welcome to Pause. Let's get started!</Text>
+      <ContinueButton onPress={() => router.push('/feelingsWheelPage')} />
     </View>
   );
 };

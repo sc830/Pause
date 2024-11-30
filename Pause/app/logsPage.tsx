@@ -9,58 +9,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { useRouter } from 'expo-router'; // Import useRouter for navigation
 import MenuButton from '@/components/MenuButton';
 import DateButton from '@/components/DateButton';
-
-// Uncomment and configure these imports when Firebase is connected
-// import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
-// const db = getFirestore();
+import SettingsButton from '@/components/SettingsButton';
+import JournalButton from '@/components/JournalButton';
+import MonthlyProgressButton from '@/components/MonthlyProgressButton';
 
 export default function LogsPage() {
   const [dates, setDates] = useState<string[]>([]); // Store dates
-  const [activities, setActivities] = useState<any[]>([]); // Store activities for selected date
-
-  // Uncomment this useEffect when Firebase is ready
-  /*
-  useEffect(() => {
-    const fetchDates = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'userActivity'));
-        const fetchedDates: string[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.timestamp) {
-            const date = new Date(data.timestamp.toDate()); // Convert Firestore Timestamp
-            const formattedDate = date.toISOString().split('T')[0]; // Format to YYYY-MM-DD
-            if (!fetchedDates.includes(formattedDate)) {
-              fetchedDates.push(formattedDate);
-            }
-          }
-        });
-        setDates(fetchedDates);
-      } catch (error) {
-        console.error('Error fetching dates:', error);
-      }
-    };
-
-    fetchDates();
-  }, []);
-  */
-
-  // Example: Save a new session to Firestore (Uncomment and use when Firebase is ready)
-  /*
-  const saveSession = async () => {
-    try {
-      await addDoc(collection(db, 'userActivity'), {
-        details: 'User completed an activity.',
-        timestamp: serverTimestamp(), // Automatically set the date/time
-      });
-      console.log('Session saved!');
-    } catch (error) {
-      console.error('Error saving session:', error);
-    }
-  };
-  */
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
+  const router = useRouter(); // Initialize router for navigation
 
   // Temporary placeholder dates for testing until Firebase is connected
   useEffect(() => {
@@ -68,10 +27,23 @@ export default function LogsPage() {
     setDates(placeholderDates);
   }, []);
 
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev); // Toggle dropdown visibility
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Choose A Date to View Past Responses:</Text>
-      <MenuButton style={styles.menuButton} onPress={() => console.log('Menu Pressed')} />
+      <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
+
+      {/* Dropdown Menu */}
+      {showDropdown && (
+        <View style={styles.dropdown}>
+          <SettingsButton onPress={() => console.log('Settings Pressed')} style={styles.dropdownButton} />
+          <JournalButton onPress={() => router.push('/journalPage')} style={styles.dropdownButton} /> {/* Navigate to Journal Page */}
+          <MonthlyProgressButton onPress={() => console.log('Monthly Progress Pressed')} style={styles.dropdownButton} />
+        </View>
+      )}
 
       {/* Render Date Buttons */}
       <FlatList
@@ -106,15 +78,30 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
   },
+  dropdown: {
+    position: 'absolute',
+    top: 70,
+    right: 20,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  dropdownButton: {
+    marginVertical: 5,
+  },
   dateButtonList: {
     marginTop: -90,
     width: '100%',
     alignItems: 'center',
   },
-
   dateButton: {
     marginVertical: 10,
-    width: '100%', 
-    alignSelf: 'center', 
+    width: '100%',
+    alignSelf: 'center',
   },
 });

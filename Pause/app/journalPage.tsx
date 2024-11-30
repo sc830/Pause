@@ -4,16 +4,19 @@
 
     Functions: 
         Prompts user to write a journal entry.
-        Requires user input in TextBox
-        Continue button is used to navigate to the next screen
+        Requires user input in TextBox.
+        Continue button is used to navigate to the next screen (logsPage).
 */
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router'; // Import useRouter for navigation
 import TextBox from '../components/TextBox';
 import ContinueButton from '../components/ContinueButton';
 
 const JournalPage: React.FC = () => {
+  const router = useRouter(); // Initialize router for navigation
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Create a New Journal Entry</Text>
@@ -26,7 +29,7 @@ const JournalPage: React.FC = () => {
       />
 
       {/* Continue Button */}
-      <ContinueButton onPress={() => console.log('Continue button pressed')} />
+      <ContinueButton onPress={() => router.push('/logsPage')} /> {/* Navigate to logsPage */}
     </View>
   );
 };
