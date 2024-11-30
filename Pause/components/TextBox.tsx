@@ -37,17 +37,18 @@
 */
 
 import React from 'react';
-import { View, KeyboardAvoidingView, SafeAreaView, TextInput, Dimensions, StyleSheet, Text, Platform } from 'react-native';
+import { View, KeyboardAvoidingView, SafeAreaView, TextInput, TextInputProps, Dimensions, StyleSheet, Text, Platform } from 'react-native';
 
 import colors from '@/constants/Colors';
 import reusedStyles from '@/constants/reusedStyles';
 import values from '@/constants/Values';
 
 // types of expected props
-interface TextBoxProps {
+interface TextBoxProps extends TextInputProps {
   boxHeight?: number;
   boxWidth?: number;
   color?: string;
+  text?: string;
 }
   
   const TextBox: React.FC<TextBoxProps> = ({ 
@@ -55,6 +56,8 @@ interface TextBoxProps {
     boxHeight = Dimensions.get('window').height * .5,
     boxWidth = Dimensions.get('window').width * values.componentWidth,
     color = colors.yellow,
+    text = "Tap here to add text",
+    ...rest
    }) => {
 
     const { width, height } = Dimensions.get('window');
@@ -65,9 +68,10 @@ interface TextBoxProps {
       style={styles.container}>
         <TextInput
             style={[reusedStyles.textInputStyle, {height: boxHeight, width: boxWidth, backgroundColor: color}]}
-            placeholder="Tap here to add text" 
+            placeholder={text}
             placeholderTextColor={colors.gray}
             multiline
+            {...rest}
         />
     </KeyboardAvoidingView>
    );
