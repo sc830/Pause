@@ -6,11 +6,14 @@
         Continue button is used to navigate to the next screen
 */
 
+import { useRouter } from "expo-router";
 import { Text, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 
 export default function Mindfulness() {
+  const router = useRouter();
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View
@@ -23,7 +26,7 @@ export default function Mindfulness() {
       >
         <Text> Mindfulness Question</Text>
         <TextBox />
-        <ContinueButton />
+        <ContinueButton onPress={() => router.push("/grounding")} />
       </View>
     </TouchableWithoutFeedback>
   );
