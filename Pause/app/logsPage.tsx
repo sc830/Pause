@@ -46,11 +46,11 @@ export default function LogsPage() {
             onPress={() => router.push("/settingsPage")}
             style={styles.dropdownButton}
           />
+          {/* Navigate to Journal Page */}
           <JournalButton
             onPress={() => router.push("/journalPage")}
             style={styles.dropdownButton}
           />{" "}
-          {/* Navigate to Journal Page */}
           <MonthlyProgressButton
             onPress={() => console.log("Monthly Progress Pressed")}
             style={styles.dropdownButton}
