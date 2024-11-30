@@ -1,27 +1,28 @@
 
 import React from 'react';
 import { Image, StyleSheet, Pressable } from 'react-native';
+
+import colors from '../constants/Colors'
+import reusedStyles from '../constants/reusedStyles'
 import settingsIcon from '../assets/images/menu.png';
 
-export default function MenuButton(props: { onPress?: any; title?: String | undefined; style?: object }) {
-  const { onPress, style } = props;
+// types of expected props
+interface MenuButtonProps {
+  onPress?: () => any,
+  style?: object,
+  altText?: string,
+}
+
+const MenuButton: React.FC<MenuButtonProps> =  ({
+  onPress,
+  style,
+  altText = "Whoops, we forgot to fill in the alt text.",
+}) => {
   return (
-    <Pressable style={[styles.button, style]} onPress={onPress}>
-      <Image source={settingsIcon} style={{ width: 50, height: 50 }} resizeMode="contain" />
+    <Pressable style={[reusedStyles.menuButton, style]} onPress={onPress}>
+      <Image source={settingsIcon} style={{ width: 50, height: 50}} resizeMode="contain" accessible={true} accessibilityLabel={altText} />
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    elevation: 90,
-    height: 50,
-    width: 50,
-    //backgroundColor: '#4f7bbd',
-  },
-});
+export default MenuButton;
