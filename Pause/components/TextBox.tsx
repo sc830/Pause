@@ -49,6 +49,7 @@ interface TextBoxProps extends TextInputProps {
   boxWidth?: number;
   color?: string;
   text?: string;
+  secure?: boolean;
 }
   
   const TextBox: React.FC<TextBoxProps> = ({ 
@@ -57,6 +58,7 @@ interface TextBoxProps extends TextInputProps {
     boxWidth = Dimensions.get('window').width * values.componentWidth,
     color = colors.yellow,
     text = "Tap here to add text",
+    secure = false,
     ...rest
    }) => {
 
@@ -71,6 +73,7 @@ interface TextBoxProps extends TextInputProps {
             placeholder={text}
             placeholderTextColor={colors.gray}
             multiline
+            secureTextEntry={secure}
             {...rest}
         />
     </KeyboardAvoidingView>

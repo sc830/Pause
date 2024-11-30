@@ -1,7 +1,5 @@
-// from ChatGPT
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import auth from '@react-native-firebase/auth'; // Import from @react-native-firebase
+import { getAuth, onAuthStateChanged } from 'firebase/auth';  // Use Firebase Web SDK imports
 
 interface AuthContextProps {
     user: any | null; // Adjust the type as needed (e.g., User | null)
@@ -15,14 +13,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [initializing, setInitializing] = useState<boolean>(true); // Handle loading state
 
     // Function to handle state change in auth
-    function onAuthStateChanged(user: any) {
+    function onAuthStateChangedHandler(user: any) {
         setUser(user); // Set user when auth state changes
         if (initializing) setInitializing(false); // Stop initializing once state is set
     }
 
     useEffect(() => {
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged); // Listen for auth state changes
-        return subscriber; // Unsubscribe when the component is unmounted
+        const auth = getAuth();  // Initialize Firebase auth
+        const subscriber = onAuthStateChanged(auth, onAuthStateChangedHandler); // Listen for auth state changes
+        return () => subscriber(); // Unsubscribe when the component is unmounted
     }, []);
 
     if (initializing) return null; // Render nothing while initializing

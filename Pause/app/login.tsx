@@ -12,22 +12,13 @@
     
     handleLoginSubmission(state.email, state.password)
 
-    auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('User signed in successfully!');
-    })
-    .catch((error) => {
-      console.error('Error signing in:', error);
-    });
     
 */
 
 import React, { useState } from 'react';
 import { Text, View } from "react-native";
+import { signIn } from '@/constants/firebase'
 import { useAuth, AuthProvider } from '@/contexts/AuthContext';
-
-import auth from '@react-native-firebase/auth';
 
 // constants
 import reusedStyles from '@/constants/reusedStyles';
@@ -56,23 +47,28 @@ export default function Index() {
             <View>
                 <Text>Please Log In</Text>
 
-                <TextBox  text= "Email"
-                  onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
-                />
+                  <View style={{margin:10}}>
+                    <TextBox  text= "Email"
+                      onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
+                    />
+                  </View>
+                  <View style={{margin:10}}>
+                    <TextBox  text= "Password"  
+                      secure={true}
+                      onChangeText={(text) => setState((prevState) => ({ ...prevState, password: text }))}
+                    />
+                  </View>
 
-                <TextBox  text= "Password"  
-                  secureTextEntry
-                  onChangeText={(text) => setState((prevState) => ({ ...prevState, password: text }))}
-                />
-
-                <StyledButton
-                    text="Login"
-                    buttonHeight={200}
-                    buttonWidth={400}
-                    onPress={() => {
-                        handleLoginSubmission(state.email, state.password)
-                    }}
-                />
+                <View>
+                  <StyledButton
+                      text="Login"
+                      buttonHeight={80}
+                      buttonWidth={600}
+                      onPress={() => {
+                          signIn(state.email, state.password)
+                      }}
+                  />
+                </View>
             </View>
           </AuthProvider>
         );
@@ -96,13 +92,3 @@ export default function Index() {
     }
 };
 
-function handleLoginSubmission(email:string, password:string) {
-  auth()
-  .signInWithEmailAndPassword(email, password)
-  .then(() => {
-    console.log('User signed in successfully!');
-  })
-  .catch((error) => {
-    console.error('Error signing in:', error);
-  });
-}

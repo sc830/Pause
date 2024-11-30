@@ -10,7 +10,7 @@
 */
 
 import { Text, View, Button } from "react-native";
-import { useAuth, AuthProvider } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 import ContinueButton from '@/components/ContinueButton';
 import '@/constants/global.css';
@@ -36,7 +36,6 @@ export default function Index() {
     }
     else {
         return (
-          <AuthProvider>
             <View
               style={{
                 flex: 1,
@@ -48,7 +47,6 @@ export default function Index() {
                     <Text>Edit app/index.tsx to edit this screen.</Text>
                     <ContinueButton/>
             </View>
-          </AuthProvider>
         )
     }
 };

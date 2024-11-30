@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: values.borderRadius,
     elevation: 3,
-    margin: 0,
+    margin: 10
   }
 });
 
