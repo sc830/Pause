@@ -7,14 +7,14 @@
         Requires user to slecet a date of interest
 */
 
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { useRouter } from 'expo-router'; // Import useRouter for navigation
-import MenuButton from '@/components/MenuButton';
-import DateButton from '@/components/DateButton';
-import SettingsButton from '@/components/SettingsButton';
-import JournalButton from '@/components/JournalButton';
-import MonthlyProgressButton from '@/components/MonthlyProgressButton';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, FlatList } from "react-native";
+import { useRouter } from "expo-router"; // Import useRouter for navigation
+import MenuButton from "@/components/MenuButton";
+import DateButton from "@/components/DateButton";
+import SettingsButton from "@/components/SettingsButton";
+import JournalButton from "@/components/JournalButton";
+import MonthlyProgressButton from "@/components/MonthlyProgressButton";
 
 export default function LogsPage() {
   const [dates, setDates] = useState<string[]>([]); // Store dates
@@ -23,7 +23,7 @@ export default function LogsPage() {
 
   // Temporary placeholder dates for testing until Firebase is connected
   useEffect(() => {
-    const placeholderDates = ['2024-11-19', '2024-11-20', '2024-11-21'];
+    const placeholderDates = ["2024-11-19", "2024-11-20", "2024-11-21"];
     setDates(placeholderDates);
   }, []);
 
@@ -33,15 +33,28 @@ export default function LogsPage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Choose A Date to View Past Responses:</Text>
+      <Text style={styles.headerText}>
+        Choose A Date to View Past Responses:
+      </Text>
       <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
 
       {/* Dropdown Menu */}
       {showDropdown && (
         <View style={styles.dropdown}>
-          <SettingsButton onPress={() => console.log('Settings Pressed')} style={styles.dropdownButton} />
-          <JournalButton onPress={() => router.push('/journalPage')} style={styles.dropdownButton} /> {/* Navigate to Journal Page */}
-          <MonthlyProgressButton onPress={() => console.log('Monthly Progress Pressed')} style={styles.dropdownButton} />
+          {/* Navigate to Settings Page */}
+          <SettingsButton
+            onPress={() => router.push("/settingsPage")}
+            style={styles.dropdownButton}
+          />
+          <JournalButton
+            onPress={() => router.push("/journalPage")}
+            style={styles.dropdownButton}
+          />{" "}
+          {/* Navigate to Journal Page */}
+          <MonthlyProgressButton
+            onPress={() => console.log("Monthly Progress Pressed")}
+            style={styles.dropdownButton}
+          />
         </View>
       )}
 
@@ -65,27 +78,27 @@ export default function LogsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   menuButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     right: 20,
   },
   dropdown: {
-    position: 'absolute',
+    position: "absolute",
     top: 70,
     right: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -96,12 +109,12 @@ const styles = StyleSheet.create({
   },
   dateButtonList: {
     marginTop: -90,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   dateButton: {
     marginVertical: 10,
-    width: '100%',
-    alignSelf: 'center',
+    width: "100%",
+    alignSelf: "center",
   },
 });
