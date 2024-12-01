@@ -7,26 +7,27 @@
         Requires user input in multiple TextBoxes.
         Continue button is used to navigate to the next screen.
 */
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router'; // Import useRouter for navigation
-import TextBox from '../components/TextBox';
-import ContinueButton from '../components/ContinueButton';
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { useRouter } from "expo-router"; // Import useRouter for navigation
+import TextBox from "../components/TextBox";
+import ContinueButton from "../components/ContinueButton";
+import Timer from "@/components/Timer";
 
 const Grounding: React.FC = () => {
   const router = useRouter(); // Hook for navigation
 
   const groundingQuestions = [
-    'Can you name five things you can see right now?',
-    'What are four things you can touch?',
-    'Can you hear three distinct sounds?',
-    'What is one smell you can detect?',
-    'Can you taste anything in your mouth?',
+    "Can you name five things you can see right now?",
+    "What are four things you can touch?",
+    "Can you hear three distinct sounds?",
+    "What is one smell you can detect?",
+    "Can you taste anything in your mouth?",
   ];
 
   // State to hold user responses for each question
   const [responses, setResponses] = useState<string[]>(
-    Array(groundingQuestions.length).fill('') // Initialize empty responses
+    Array(groundingQuestions.length).fill("") // Initialize empty responses
   );
 
   // Function to handle response changes
@@ -38,12 +39,13 @@ const Grounding: React.FC = () => {
 
   // Handle Continue button press
   const handleContinue = () => {
-    console.log('User Responses:', responses); // Log all responses
-    router.push('/gratitude'); // Navigate to the Gratitude page
+    console.log("User Responses:", responses); // Log all responses
+    router.push("/gratitude"); // Navigate to the Gratitude page
   };
 
   return (
     <View style={styles.container}>
+      <Timer initialTime={20}></Timer>
       <Text style={styles.header}>Grounding Exercise</Text>
 
       {/* Render a TextBox for each question */}
@@ -69,26 +71,26 @@ const Grounding: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', // Aligns content at the top
-    alignItems: 'center',
+    justifyContent: "flex-start", // Aligns content at the top
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
     marginTop: 40, // Adds space from the top of the screen
-    textAlign: 'center',
+    textAlign: "center",
   },
   questionContainer: {
     marginBottom: 20,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   question: {
     fontSize: 18,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 25,
   },
 });
