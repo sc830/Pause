@@ -2,15 +2,16 @@
 
 
   References:
-    Authentication/initializing template from ChatGPT
-      const { user, initializing } = useAuth(); // Get user data from context
-      if (initializing) return <Text>Loading...</Text>; // Show loading until initialized
-      if (!user) {
+    ChatGPT
+      Authentication/initializing template
+        const { user, initializing } = useAuth(); // Get user data from context
+        if (initializing) return <Text>Loading...</Text>; // Show loading until initialized
+        if (!user) {
+      Fix references to state variables
+        onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
+        handleLoginSubmission(state.email, state.password)
     React Native Firebase documentation https://rnfirebase.io/auth/usage#main
-
-    onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
-    
-    handleLoginSubmission(state.email, state.password)
+    Login Screen example https://alitalhacoban.medium.com/basic-login-screen-with-react-native-c9f7fdcc8dae
 
     
 */
