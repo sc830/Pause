@@ -19,11 +19,11 @@ const Grounding: React.FC = () => {
   const router = useRouter(); // Hook for navigation
 
   const groundingQuestions = [
-    "Can you name five things you can see right now?",
-    "What are four things you can touch?",
-    "Can you hear three distinct sounds?",
-    "What is one smell you can detect?",
-    "Can you taste anything in your mouth?",
+    "What is one thing that you can see in the space around you?",
+    "What four things could you touch in the space around you?",
+    "Can you hear anything right now? Name one.",
+    "Can you smell anything right now? Name that smell.",
+    "Can you taste anything? What is the flavor?",
   ];
 
   // State to hold user responses for each question

@@ -21,7 +21,7 @@ const FeelingsWheelPage: React.FC = () => {
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/grounding'); // Navigate to the Grounding Page
+      router.push('/mindfulnessPage'); // Navigate to the Grounding Page
     } else {
       console.log('Please select a feeling before continuing.');
     }

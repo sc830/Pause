@@ -7,14 +7,11 @@ export default function RootLayout() {
       <AuthProvider>
         <Stack>
           <Stack.Screen name="index" options={{ title: "Welcome" }} />
-          <Stack.Screen name="logsPage" options={{ title: "Logs" }} />
-          <Stack.Screen name="logsSubpage" options={{ title: "Log Details" }} /> {/* Added subLogs */}
-          <Stack.Screen
-            name="feelingsWheelPage"
-            options={{ title: "Feelings Wheel" }}
-          />
+          <Stack.Screen name="feelingsWheelPage" options={{ title: "Feelings Wheel" }} />
+          <Stack.Screen name="mindfulnessPage" options={{ title: "Mindfulness" }}/>
           <Stack.Screen name="grounding" options={{ title: "Grounding" }} />
           <Stack.Screen name="gratitude" options={{ title: "Gratitude" }} />
+          <Stack.Screen name="logsPage" options={{ title: "Logs" }} />
           <Stack.Screen name="journalPage" options={{ title: "Journal" }} />
           <Stack.Screen
             name="settingsPage"
