@@ -13,8 +13,9 @@ import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 import AddButton from "@/components/AddButton";
+import Timer from "@/components/Timer";
 
-export default function Gratitude() {
+export function Gratitude() {
   const router = useRouter(); // Hook for navigation
   const [textInputs, setTextInputs] = useState<string[]>(["", "", ""]);
 
@@ -35,11 +36,19 @@ export default function Gratitude() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>List three things that you are grateful for:</Text>
-      <Text style={styles.subHeader}>Click the plus button if you can think of more.</Text>
+      <Timer initialTime={20}></Timer>
+      <Text style={styles.header}>
+        List three things that you are grateful for:
+      </Text>
+      <Text style={styles.subHeader}>
+        Click the plus button if you can think of more.
+      </Text>
 
       {/* Scrollable area for text boxes and Add Button */}
-      <ScrollView contentContainerStyle={styles.scrollContent} style={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        style={styles.scrollView}
+      >
         {textInputs.map((input, index) => (
           <View key={index} style={styles.textBoxContainer}>
             <Text style={styles.number}>{index + 1}.</Text>
