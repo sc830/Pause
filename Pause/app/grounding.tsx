@@ -8,7 +8,7 @@
         Continue button is used to navigate to the next screen.
 */
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox";
 import ContinueButton from "../components/ContinueButton";
@@ -45,25 +45,33 @@ const Grounding: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Timer initialTime={20}></Timer>
-      <Text style={styles.header}>Grounding Exercise</Text>
+      {/* Scrollable Content */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Timer initialTime={20} />
+        <Text style={styles.header}>Grounding Exercise</Text>
 
-      {/* Render a TextBox for each question */}
-      {groundingQuestions.map((question, index) => (
-        <View key={index} style={styles.questionContainer}>
-          <Text style={styles.question}>{question}</Text>
-          <TextBox
-            boxHeight={20} // Adjusted height
-            boxWidth={500} // Adjusted width
-            color="#f8f9fa" // Light background color
-            value={responses[index]} // Bind value to the corresponding response
-            onChangeText={(text) => handleResponseChange(text, index)} // Update response
-          />
-        </View>
-      ))}
+        {/* Render a TextBox for each question */}
+        {groundingQuestions.map((question, index) => (
+          <View key={index} style={styles.questionContainer}>
+            <Text style={styles.question}>{question}</Text>
+            <TextBox
+              boxHeight={20} // Adjusted height
+              boxWidth={500} // Adjusted width
+              color="#f8f9fa" // Light background color
+              value={responses[index]} // Bind value to the corresponding response
+              onChangeText={(text) => handleResponseChange(text, index)} // Update response
+            />
+          </View>
+        ))}
 
-      {/* Continue Button */}
-      <ContinueButton onPress={handleContinue} />
+        {/* Spacer to provide padding for scrolling */}
+        <View style={styles.spacer} />
+      </ScrollView>
+
+      {/* Fixed Continue Button */}
+      <View style={styles.continueButtonContainer}>
+        <ContinueButton onPress={handleContinue} />
+      </View>
     </View>
   );
 };
@@ -71,7 +79,9 @@ const Grounding: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start", // Aligns content at the top
+  },
+  scrollContent: {
+    flexGrow: 1,
     alignItems: "center",
     paddingHorizontal: 20,
   },
@@ -79,7 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    marginTop: 40, // Adds space from the top of the screen
+    marginTop: 40,
     textAlign: "center",
   },
   questionContainer: {
@@ -92,6 +102,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     lineHeight: 25,
+  },
+  spacer: {
+    height: 100, // Space at the bottom of the scrollable content
+  },
+  continueButtonContainer: {
+    position: "absolute", // Fixed position
+    bottom: 20,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    backgroundColor: "#fff", // Match background color to prevent overlap
+    paddingVertical: 10,
   },
 });
 

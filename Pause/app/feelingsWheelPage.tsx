@@ -189,9 +189,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   continueButtonContainer: {
-    marginTop: 100,
-    alignSelf: 'stretch',
-    alignItems: 'center',
+    position: "absolute",
+    bottom: 20,
+    alignSelf: 'center',
+
   },
 });
 
