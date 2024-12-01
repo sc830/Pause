@@ -24,7 +24,7 @@ export default function Mindfulness() {
 
   // Handle Continue button press
   const handleContinue = () => {
-    router.push("/grounding"); // Navigate to the Gratitude page
+    router.push("/grounding"); // Navigate to the Grounding page
   };
 
   return (
