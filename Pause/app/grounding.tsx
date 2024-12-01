@@ -3,47 +3,15 @@
     Screen 3
 
     Functions: 
-        Prompts user with grounding question
-        Requires user input in TextBox
-        Continue button is used to navigate to the next screen
+        - Prompts user with grounding questions.
+        - Requires user input in multiple TextBoxes.
+        - Continue button is used to navigate to the next screen.
 */
 
-import { Text, View, TouchableWithoutFeedback, Keyboard } from "react-native";
-import TextBox from "@/components/TextBox";
-import ContinueButton from "@/components/ContinueButton";
-
-export default function Grounding() {
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text> Grounding Question</Text>
-        <TextBox />
-        <ContinueButton />
-      </View>
-    </TouchableWithoutFeedback>
-  );
-}
-
-/*  grounding.tsx
-
-    Screen 3
-
-    Functions: 
-        Prompts user with grounding questions.
-        Requires user input in multiple TextBoxes.
-        Continue button is used to navigate to the next screen.
-*/
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
-import TextBox from "../components/TextBox";
+import TextBox from "../components/TextBox"; // Single import for TextBox
 import ContinueButton from "../components/ContinueButton";
 import Timer from "@/components/Timer";
 
@@ -77,13 +45,15 @@ const Grounding: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Timer initialTime={20} />
-        <Text style={styles.header}>Grounding Exercise</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <Timer initialTime={20} />
+      <Text style={styles.header}>Grounding Exercise</Text>
 
-        {/* Render a TextBox for each question */}
+      {/* Scrollable container for questions */}
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {groundingQuestions.map((question, index) => (
           <View key={index} style={styles.questionContainer}>
             <Text style={styles.question}>{question}</Text>
@@ -96,34 +66,35 @@ const Grounding: React.FC = () => {
             />
           </View>
         ))}
-
-        {/* Spacer to provide padding for scrolling */}
-        <View style={styles.spacer} />
       </ScrollView>
 
       {/* Fixed Continue Button */}
       <View style={styles.continueButtonContainer}>
         <ContinueButton onPress={handleContinue} />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    alignItems: "center",
-    paddingHorizontal: 20,
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
     marginTop: 40,
+    marginBottom: 20,
     textAlign: "center",
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 100, // To avoid overlap with the fixed button
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
   questionContainer: {
     marginBottom: 20,
@@ -136,17 +107,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 25,
   },
-  spacer: {
-    height: 100, // Space at the bottom of the scrollable content
-  },
   continueButtonContainer: {
-    position: "absolute", // Fixed position
+    position: "absolute",
     bottom: 20,
-    left: 0,
-    right: 0,
+    width: "100%",
     alignItems: "center",
-    backgroundColor: "#fff", // Match background color to prevent overlap
-    paddingVertical: 10,
   },
 });
 
