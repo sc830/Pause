@@ -1,12 +1,20 @@
+/* firebase.ts
 
+
+  References:
+  ChatGPT
+
+  Firestore documentation
+    Read functions https://firebase.google.com/docs/firestore/query-data/get-data
+    Write functions https://firebase.google.com/docs/firestore/manage-data/add-data
+
+*/
 
 // Import the Firebase Web SDK (modular imports)
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
-import { collection, getDoc, doc, getDocs } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { auth, firestore } from '@/constants/firebaseConfig'; // Import the initialized Firebase app
 
-// Example: Firebase Authentication Functions
-// Function to handle email/password sign-in
 export const signIn = async (email: string, password: string) => {
   try {
     // Use the getAuth function with the initialized app
@@ -18,7 +26,6 @@ export const signIn = async (email: string, password: string) => {
     throw error;  // You can throw or handle the error as needed
   }
 };
-
 
 export const fetchDoc = async (docPath: string) => {
   try {
@@ -58,4 +65,9 @@ export const fetchCollection = async (collPath: string) => {
     console.error("Error fetching document:", error);
     return error;
   }
+}
+
+export const writeDoc = async (docPath: string, docData: object) => {
+  const ref = doc(firestore, docPath);
+  await setDoc(ref, docData);
 }
