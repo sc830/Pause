@@ -37,39 +37,44 @@
 */
 
 import React from 'react';
-import {
-  View,
-  KeyboardAvoidingView,
-  TextInput,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, KeyboardAvoidingView, SafeAreaView, TextInput, TextInputProps, Dimensions, StyleSheet, Text, Platform } from 'react-native';
 
-import reusedStyles from '../constants/reusedStyles';
-import colors from '../constants/Colors'
+import colors from '@/constants/Colors';
+import reusedStyles from '@/constants/reusedStyles';
+import values from '@/constants/Values';
 
 // types of expected props
-interface TextBoxProps {
+interface TextBoxProps extends TextInputProps {
   boxHeight?: number;
   boxWidth?: number;
   color?: string;
+  text?: string;
+  secure?: boolean;
 }
   
   const TextBox: React.FC<TextBoxProps> = ({ 
     // default values for props, if any
-    boxHeight = 1500,
-    boxWidth = 1000,
-    color = colors.blue,
+    boxHeight = Dimensions.get('window').height * .5,
+    boxWidth = Dimensions.get('window').width * values.componentWidth,
+    color = colors.yellow,
+    text = "Tap here to add text",
+    secure = false,
+    ...rest
    }) => {
+
+    const { width, height } = Dimensions.get('window');
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
         <TextInput
             style={[reusedStyles.textInputStyle, {height: boxHeight, width: boxWidth, backgroundColor: color}]}
-            placeholder="Tap here to add text" 
-            placeholderTextColor='#b6b7b8'
+            placeholder={text}
+            placeholderTextColor={colors.gray}
             multiline
+            secureTextEntry={secure}
+            {...rest}
         />
     </KeyboardAvoidingView>
    );
@@ -79,19 +84,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  inner: {
-    padding: 24,
+  textInput: {
+    marginVertical: 10,
+    marginHorizontal: 5,
+    backgroundColor: colors.yellow,
+    color: colors.black,
+    borderColor: '#ffffff',
+    borderRadius: values.borderRadius,
+    borderWidth: 0,
     flex: 1,
-    justifyContent: 'space-around',
-  },
-  header: {
-    fontSize: 36,
-    marginBottom: 48,
-  },
-  btnContainer: {
-    backgroundColor: 'white',
-    marginTop: 12,
-  },
+    padding: 30,      
+  }
 });
 
 export default TextBox;

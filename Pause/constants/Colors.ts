@@ -1,4 +1,4 @@
-/* colors.ts
+/* Colors.ts
 
   Props:  none
 
@@ -7,7 +7,7 @@
   Functions:  allow access to standard colors by name
 
   Usage: add import statement in any other file and reference colors by name
-    import colors from '../constants/Colors'
+    import colors from '@/constants/Colors'
     style={{ backgroundColor: colors.yellow }}
 
   References:
@@ -21,7 +21,10 @@ const tintColorDark = '#fff';
 const colors = {
   yellow: '#FAF0DA',
   green: '#C9E4DE',
-  blue: 'A9D1D9',
+  blue: '#A9D1D9',
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#757575',
 
   // dark and light full component styles
   light: {
