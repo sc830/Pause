@@ -13,7 +13,7 @@ import TextBox from '@/components/TextBox';
 import { colors, reusedStyles, values } from '@/constants';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function Index() {
+export default function logsInfo() {
 
   const userLogs = firestore().collection('users').doc('exampleUser')
 
