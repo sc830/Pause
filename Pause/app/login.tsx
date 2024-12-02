@@ -18,7 +18,7 @@
 import React, { useState } from 'react';
 import { Text, View } from "react-native";
 import { useRouter } from 'expo-router';
-import { signIn } from '@/constants/firebase'
+import { userSignIn } from '@/constants/firebase'
 import { useAuth, AuthProvider } from '@/contexts/AuthContext';
 
 // constants
@@ -87,6 +87,8 @@ export default function Login() {
               }}
             >
                     <Text>Hey, you logged in! Good for you.</Text>
+                    <Text>You shouldn't be seeing this screen, though.</Text>
+                    <Text>There's been an error.</Text>
 
             </View>
           </AuthProvider>
@@ -95,7 +97,7 @@ export default function Login() {
 };
 
 const handleLogin = async (email: string, pass: string, router: any) => {
-  await signIn(email, pass);
+  await userSignIn(email, pass);
   router.push('/');
 }
 

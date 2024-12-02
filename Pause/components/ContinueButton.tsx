@@ -26,7 +26,6 @@ import colors from '@/constants/Colors';
 import reusedStyles from '@/constants/reusedStyles';
 import values from '@/constants/Values';
 
-// types of expected props
 interface ContinueButtonProps {
   onPress?: () => void;
   text?: string;

@@ -4,12 +4,12 @@
 
   Export (default): styles for common app components
   - textInputStyle: text inside textInput components
-  - headerStyle:  header/title text
+  - headerStyle: header/title text
   - menuButton: menu buttons
 
-  Functions:  allow access to standard styles by name
+  Functions: allow access to standard styles by name
 
-  Usage: add import statement in any other file and reference colors by name
+  Usage: add import statement in any other file and reference styles by name:
     import reusedStyles from '../constants/reusedStyles'
       style={reusedStyles.menuButton} 
       OR style={[reusedStyles.menuButton, {backgroundColor: '#ffffff'}]}
@@ -20,8 +20,8 @@
     Referenced ChatGPT for layout and export to other files
 */
 
-import {StyleSheet} from 'react-native';
-import colors from '@/constants/Colors'
+import { StyleSheet } from 'react-native'; // Single StyleSheet import
+import colors from '@/constants/Colors';
 
 const reusedStyles = StyleSheet.create({
   headerTextStyle: {
@@ -35,7 +35,7 @@ const reusedStyles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 0,
     flex: 1,
-    padding: 30,      
+    padding: 30,
   },
   textStyle: {
     fontSize: 16,
@@ -46,14 +46,28 @@ const reusedStyles = StyleSheet.create({
   buttonTextStyle: {
     fontSize: 20,
     alignItems: 'center',
-    alignContent: 'center',
     justifyContent: 'center',
     lineHeight: 40,
-    fontWeight: 400,
+    fontWeight: '400',
     letterSpacing: 0.55,
     color: colors.black,
   },
   menuButton: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#f0f0f0',
+  },
+  dateButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    elevation: 10,
+    backgroundColor: '#4f7bbd', // Same color as original DateButton
+    top: 100,
+  },
+  settingsButton: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
@@ -63,5 +77,37 @@ const reusedStyles = StyleSheet.create({
     height: 50,
     width: 50,
   },
+  journalButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    elevation: 3,
+    height: 50,
+    width: 50,
+  },
+  monthlyProgressButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    elevation: 3,
+    height: 50,
+    width: 50,
+  },
+  continueButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 3,
+    height: 50,
+    width: 200,
+    marginVertical: 10,
+  },
 });
+
 export default reusedStyles;

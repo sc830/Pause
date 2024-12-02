@@ -11,11 +11,11 @@
 */
 
 // Import the Firebase Web SDK (modular imports)
-import { signInWithEmailAndPassword } from 'firebase/auth'; 
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'; 
 import { doc, collection, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { auth, firestore } from '@/constants/firebaseConfig'; // Import the initialized Firebase app
 
-export const signIn = async (email: string, password: string) => {
+export const userSignIn = async (email: string, password: string) => {
   try {
     // Use the getAuth function with the initialized app
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -26,6 +26,15 @@ export const signIn = async (email: string, password: string) => {
     throw error;  // You can throw or handle the error as needed
   }
 };
+export const userSignOut = async() => {
+  await signOut(auth).then(() => {
+    // Sign-out successful.
+    console.log("Logged out successfully");
+  }).catch((error) => {
+    // An error happened.
+    console.log("Error logging out: ", error);
+  });
+}
 
 export const fetchDoc = async (docPath: string) => {
   try {

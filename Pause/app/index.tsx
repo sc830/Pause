@@ -1,6 +1,5 @@
 /* index.tsx
 
-
   References:
     Authentication/initializing template from ChatGPT
       const { user, initializing } = useAuth(); // Get user data from context
@@ -14,7 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 
 import ContinueButton from '@/components/ContinueButton';
-import '@/constants/global.css';
+import '@/constants/global.css'; // Import global styles
 
 export default function Index() {
     const router = useRouter(); // Hook for navigation
@@ -48,7 +47,7 @@ export default function Index() {
             }}
           >
             <Text>Welcome to Pause. Let's get started!</Text>
-            <ContinueButton onPress={() => router.push('/')} />
+            <ContinueButton onPress={() => router.push('/feelingsWheelPage')} />
         </View>
         )
     }
