@@ -76,6 +76,7 @@ export default function Index() {
         );
     }
     else {
+      console.log("Current user: ", user.email);
         return (
           <AuthProvider>
             <View
