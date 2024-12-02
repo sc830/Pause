@@ -37,6 +37,7 @@ export default function Index() {
     }
     else {
       console.log("Current user: ", user.email);
+      console.log("UID: ", user.uid);
         return (
           <View
             style={{

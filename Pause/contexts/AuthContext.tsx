@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';  // Use Firebase Web SDK imports
+import { onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence  } from 'firebase/auth';
+import { auth } from '@/constants/firebaseConfig'; // Import the shared auth instance
 
 interface AuthContextProps {
     user: any | null; // Adjust the type as needed (e.g., User | null)
@@ -19,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     useEffect(() => {
-        const auth = getAuth();  // Initialize Firebase auth
+        setPersistence(auth, browserSessionPersistence);
         const subscriber = onAuthStateChanged(auth, onAuthStateChangedHandler); // Listen for auth state changes
         return () => subscriber(); // Unsubscribe when the component is unmounted
     }, []);

@@ -13,19 +13,10 @@ import TextBox from '@/components/TextBox';
 import { colors, reusedStyles, values } from '@/constants';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function logsInfo() {
+export default function Index() {
 
   const userLogs = firestore().collection('users').doc('exampleUser')
 
-  const readDataFromFirestore = async (collection) => {
-    try {
-      const ref = collection.firestore().collection(collection)
-      const response = await ref.get()
-      return response
-    } catch (error) {
-      return error
-    }
-  }
 
   return (
     <SafeAreaProvider>
