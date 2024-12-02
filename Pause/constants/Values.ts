@@ -25,7 +25,7 @@ interface Values {
 
 // Define and export the values object with the correct type
 const values: Values = {
-  borderRadius: 15,
+  borderRadius: 20,
   componentWidth: 0.95,
   confirmButtonHeight: .04,
   titleBarHeight: .1,

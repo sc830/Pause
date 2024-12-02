@@ -35,7 +35,7 @@ interface ContinueButtonProps {
 const ContinueButton: React.FC<ContinueButtonProps> = ({
   onPress,
   text = "Continue",
-  color = colors.yellow,
+  color = colors.green,
 }) => {
   const { width, height } = Dimensions.get('window');
   const insets = useSafeAreaInsets();                 // Get safe area insets

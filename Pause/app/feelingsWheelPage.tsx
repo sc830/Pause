@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router'; // Import useRouter for navigation
-import wheelImage from '../assets/images/feelingsWheel.jpg';
+import wheelImage from '../assets/images/feelingsWheel.png';
 import Timer from '../components/Timer'; // Import Timer Component
 import ContinueButton from '../components/ContinueButton';
+
+// constants
+import Colors from '@/constants/Colors';
+import values from '@/constants/Values';
 
 const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
@@ -90,7 +94,7 @@ const FeelingsWheelPage: React.FC = () => {
     <View style={styles.container}>
       <Timer initialTime={20} /> {/* Add Timer at the top */}
         <View style={styles.columnContainer}>
-          <View style={[styles.columnSubContainer, {flex:3}]}>
+          <View style={[styles.columnSubContainer, {flex:4}]}>
             <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
           </View>
           <View style={[styles.columnSubContainer, {flex:2}]}>
@@ -99,7 +103,7 @@ const FeelingsWheelPage: React.FC = () => {
                   selectedEmotion ? (
                     selectedSubFeeling ? (
                       <>
-                        <Text style={styles.instruction}>
+                        <Text style={styles.instructionHeader}>
                           The last two emotions come from the outside of the wheel.
                         </Text>
                         <Text style={styles.instruction}>
@@ -108,19 +112,19 @@ const FeelingsWheelPage: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <Text style={styles.instruction}>
-                          The following list of emotions come from the middle of the wheel.
+                        <Text style={styles.instructionHeader}>
+                          Stage 2: Narrow Emotion Category
                         </Text>
-                        <Text style={styles.instruction}>
-                          Click on the emotion that best describes the feeling you previously selected: "{selectedEmotion}".
-                        </Text>
+                          <Text style={styles.instruction}>
+                            Select a more specific category of emotion from the middle of the wheel.
+                          </Text>
                         
                       </>
                     )
                   ) : (
                     <>
-                      <Text style={styles.instruction}>
-                        Tier 1: Basic Emotion Category
+                      <Text style={styles.instructionHeader}>
+                        Stage 1: Basic Emotion Category
                       </Text>
                       <Text style={styles.instruction}>
                         Select a category of emotion from the center of the wheel.
@@ -130,14 +134,11 @@ const FeelingsWheelPage: React.FC = () => {
                 ) : (
                   <>
                     <Text style={styles.instruction}>
-                      After completing the feelings wheel activity, it seems that you may be feeling:
+                      You've identified your current emotion as:
                     </Text>
-                    <Text style={[styles.instruction, styles.boldText]}>{finalFeeling}.</Text>
+                    <Text style={[styles.instruction, styles.boldText, {fontSize: 60}]}>{finalFeeling}</Text>
                     <Text style={styles.instruction}>
                       Identifying your feelings is an important step in regulating your emotions. Well done!
-                    </Text>
-                    <Text style={styles.instruction}>
-                      Press the reset button if you'd like to go through the feelings wheel again or click continue to progress through the application.
                     </Text>
                     
                   </>
@@ -179,9 +180,16 @@ const FeelingsWheelPage: React.FC = () => {
                     </Pressable>
                   ))}
                 {finalFeeling && (
-                  <Pressable style={styles.button} onPress={resetSelection}>
-                    <Text style={styles.buttonText}>Reset</Text>
-                  </Pressable>
+                  <View style={{alignContent:'center', }}>
+                    <View style={{marginTop:20, marginBottom:5}}>
+                      <Text style={[styles.instruction, {marginTop:0}]}>
+                        Click reset to change your answer or click continue.
+                      </Text>
+                    </View>
+                    <Pressable style={[styles.resetButton, {alignSelf:'center'}]} onPress={resetSelection}>
+                      <Text style={styles.buttonText}>Reset</Text>
+                    </Pressable>
+                  </View>
                 )}
               </View>
           </View>
@@ -200,34 +208,34 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.blue,
     paddingTop: 20
   },
   container: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.blue,
     marginHorizontal: 20
   },
   columnContainer: {
     flex: 9,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: Colors.blue
   },
   columnSubContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: Colors.blue
   },
   rowContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: Colors.blue
   },
   wheelImage: {
     flex: 1,
@@ -237,12 +245,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
   },
+  instructionHeader: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 20,
+    fontWeight: 600,
+    letterSpacing: 0.5,
+    lineHeight: 22,
+  },
   instruction: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
     marginBottom: 10,
     marginTop: 20,
     lineHeight: 22,
+    marginHorizontal: 100,
   },
   boldText: {
     fontWeight: 'bold',
@@ -257,16 +275,25 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   button: {
-    backgroundColor: '#4f7bbd',
+    backgroundColor: Colors.green,
+    borderRadius: values.borderRadius,
     padding: 15,
-    margin: 8,
-    borderRadius: 10,
+    margin: 10,
     minWidth: 120,
     alignItems: 'center',
   },
+  resetButton: {
+    backgroundColor: Colors.green,
+    borderRadius: values.borderRadius,
+    padding: 15,
+    margin: 10,
+    minWidth: 200,
+    maxWidth: 400,
+    alignItems: 'center',
+  },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black',
+    fontWeight: '400',
     fontSize: 16,
     textAlign: 'center',
   },
