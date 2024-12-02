@@ -67,7 +67,7 @@ export default function Login() {
                       buttonHeight={80}
                       buttonWidth={600}
                       onPress={() => {
-                          handleLogin(state.email, state.password);
+                          handleLogin(state.email, state.password, router);
                       }}
                   />
                 </View>
@@ -94,8 +94,7 @@ export default function Login() {
     }
 };
 
-const handleLogin = async (email: string, pass: string) => {
-  const router = useRouter(); // Hook for navigation
+const handleLogin = async (email: string, pass: string, router: any) => {
   await signIn(email, pass);
   router.push('/');
 }
