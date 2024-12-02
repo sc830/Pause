@@ -46,29 +46,35 @@ const Index: React.FC = () => {
       >
         <Text>Please Log In</Text>
         <Button
-          title="Login with Email"
+          title="Looks like you aren't logged in. Let's fix that!"
           onPress={() => {
-            // Implement login logic here
+            router.push('/login');
           }}
         />
       </View>
     );
   }
 
+
+  
   // If user is logged in, show the main content
-  return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text>Welcome to Pause. Let's get started!</Text>
-      <ContinueButton onPress={() => router.push('/feelingsWheelPage')} />
-    </View>
-  );
+  else {
+    console.log("Current user: ", user.email);
+    return (
+
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text>Welcome to Pause. Let's get started!</Text>
+        <ContinueButton onPress={() => router.push('/feelingsWheelPage')} />
+      </View>
+    );
+  }
 };
 
 export default Index;

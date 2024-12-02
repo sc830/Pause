@@ -17,6 +17,7 @@
 
 import React, { useState } from 'react';
 import { Text, View } from "react-native";
+import { useRouter } from 'expo-router';
 import { signIn } from '@/constants/firebase'
 import { useAuth, AuthProvider } from '@/contexts/AuthContext';
 
@@ -29,13 +30,14 @@ import TextBox from '@/components/TextBox';
 
 import '@/constants/global.css';
 
-export default function Index() {
+export default function Login() {
 
     const [state,setState] = useState({
       email: '',
       password: '',
     })
 
+    const router = useRouter();
     const { user, initializing } = useAuth(); // Get user data from context
 
     if (initializing) return <Text>Loading...</Text>; // Show loading until initialized
@@ -65,8 +67,7 @@ export default function Index() {
                       buttonHeight={80}
                       buttonWidth={600}
                       onPress={() => {
-                          signIn(state.email, state.password)
-                          // add navigation to next page here
+                          handleLogin(state.email, state.password);
                       }}
                   />
                 </View>
@@ -92,4 +93,10 @@ export default function Index() {
         )
     }
 };
+
+const handleLogin = async (email: string, pass: string) => {
+  const router = useRouter(); // Hook for navigation
+  await signIn(email, pass);
+  router.push('/');
+}
 
