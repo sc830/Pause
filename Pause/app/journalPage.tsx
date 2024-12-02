@@ -61,13 +61,15 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
+    marginBottom: 20,
+    marginTop: 40,
     paddingBottom: 80, // Ensures the content doesn't overlap the button
   },
   header: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "bold",
     marginBottom: 20,
-    marginTop: 40,
+    marginTop: 5,
     textAlign: "center",
   },
   continueButtonContainer: {
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     width: "100%",
     alignItems: "center",
+  
   },
 });
 

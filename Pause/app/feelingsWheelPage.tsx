@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router'; // Import useRouter for navigation
-
 import wheelImage from '../assets/images/feelingsWheel.jpg';
+import Timer from '../components/Timer'; // Import Timer Component
 import ContinueButton from '../components/ContinueButton';
 
 const FeelingsWheelPage: React.FC = () => {
@@ -21,7 +21,7 @@ const FeelingsWheelPage: React.FC = () => {
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/mindfulnessPage'); // Navigate to the Grounding Page
+      router.push('/mindfulnessPage'); // Navigate to the Mindfulness Page
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -85,68 +85,106 @@ const FeelingsWheelPage: React.FC = () => {
     },
   };
 
-  return (
-    <View style={styles.container}>
-      <Image
-        source={wheelImage}
-        style={styles.wheelImage}
-        resizeMode="contain"
-      />
-      <Text style={styles.instruction}>
-        {!finalFeeling
-          ? selectedEmotion
-            ? selectedSubFeeling
-              ? `Choose a deeper feeling for "${selectedSubFeeling}"`
-              : `Choose a feeling related to "${selectedEmotion}"`
-            : 'Choose an emotion from the center of the wheel'
-          : `You selected: ${finalFeeling}. Press Reset to start over.`}
-      </Text>
-      <View style={styles.buttonsContainer}>
-        {!selectedEmotion &&
-          Object.keys(emotions).map((emotion) => (
-            <Pressable
-              key={emotion}
-              style={styles.button}
-              onPress={() => setSelectedEmotion(emotion)}
-            >
-              <Text style={styles.buttonText}>{emotion}</Text>
-            </Pressable>
-          ))}
-        {selectedEmotion && !selectedSubFeeling &&
-          Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
-            (subFeeling) => (
-              <Pressable
-                key={subFeeling}
-                style={styles.button}
-                onPress={() => setSelectedSubFeeling(subFeeling)}
-              >
-                <Text style={styles.buttonText}>{subFeeling}</Text>
-              </Pressable>
-            )
-          )}
-        {selectedSubFeeling && !finalFeeling &&
-          emotions[selectedEmotion as keyof typeof emotions][
-            selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
-          ].map((deeperFeeling) => (
-            <Pressable
-              key={deeperFeeling}
-              style={styles.button}
-              onPress={() => setFinalFeeling(deeperFeeling)}
-            >
-              <Text style={styles.buttonText}>{deeperFeeling}</Text>
-            </Pressable>
-          ))}
-        {finalFeeling && (
-          <Pressable style={styles.button} onPress={resetSelection}>
-            <Text style={styles.buttonText}>Reset</Text>
-          </Pressable>
-        )}
-      </View>
-      <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} />
-      </View>
+ return (
+  <View style={styles.container}>
+    <Timer initialTime={20} /> {/* Add Timer at the top */}
+    <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
+    <View style={styles.instructionContainer}>
+      {!finalFeeling ? (
+        selectedEmotion ? (
+          selectedSubFeeling ? (
+            <>
+              <Text style={styles.instruction}>
+                The last two emotions come from the outside of the wheel.
+              </Text>
+              <Text style={styles.instruction}>
+                Click on the emotion that best describes the feeling you previously selected: "{selectedSubFeeling}".
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.instruction}>
+                The following list of emotions come from the middle of the wheel.
+              </Text>
+              <Text style={styles.instruction}>
+                 Click on the emotion that best describes the feeling you previously selected: "{selectedEmotion}".
+              </Text>
+              
+            </>
+          )
+        ) : (
+          <>
+            <Text style={styles.instruction}>
+              The following list of emotions come from the center of the wheel pictured above.
+            </Text>
+            <Text style={styles.instruction}>
+              Please click on the emotion in the list that best describes how you are currently feeling:
+            </Text>
+          </>
+        )
+      ) : (
+        <>
+          <Text style={styles.instruction}>
+            After completing the feelings wheel activity, it seems that you may be feeling:
+          </Text>
+          <Text style={[styles.instruction, styles.boldText]}>{finalFeeling}.</Text>
+          <Text style={styles.instruction}>
+            Identifying your feelings is an important step in regulating your emotions. Well done!
+          </Text>
+          <Text style={styles.instruction}>
+            Press the reset button if you'd like to go through the feelings wheel again or click continue to progress through the application.
+          </Text>
+          
+        </>
+      )}
     </View>
-  );
+    <View style={styles.buttonsContainer}>
+      {!selectedEmotion &&
+        Object.keys(emotions).map((emotion) => (
+          <Pressable
+            key={emotion}
+            style={styles.button}
+            onPress={() => setSelectedEmotion(emotion)}
+          >
+            <Text style={styles.buttonText}>{emotion}</Text>
+          </Pressable>
+        ))}
+      {selectedEmotion && !selectedSubFeeling &&
+        Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
+          (subFeeling) => (
+            <Pressable
+              key={subFeeling}
+              style={styles.button}
+              onPress={() => setSelectedSubFeeling(subFeeling)}
+            >
+              <Text style={styles.buttonText}>{subFeeling}</Text>
+            </Pressable>
+          )
+        )}
+      {selectedSubFeeling && !finalFeeling &&
+        emotions[selectedEmotion as keyof typeof emotions][
+          selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
+        ].map((deeperFeeling) => (
+          <Pressable
+            key={deeperFeeling}
+            style={styles.button}
+            onPress={() => setFinalFeeling(deeperFeeling)}
+          >
+            <Text style={styles.buttonText}>{deeperFeeling}</Text>
+          </Pressable>
+        ))}
+      {finalFeeling && (
+        <Pressable style={styles.button} onPress={resetSelection}>
+          <Text style={styles.buttonText}>Reset</Text>
+        </Pressable>
+      )}
+    </View>
+    <View style={styles.continueButtonContainer}>
+      <ContinueButton onPress={handleContinue} />
+    </View>
+  </View>
+);
+
 };
 
 const styles = StyleSheet.create({
@@ -159,20 +197,31 @@ const styles = StyleSheet.create({
   },
   wheelImage: {
     width: '90%',
-    height: '70%',
-    marginBottom: 10,
+    height: '65%',
+    marginBottom: 20,
+  },
+  instructionContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   instruction: {
     fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 10,
     textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 20,
+    lineHeight: 22,
+  },
+  boldText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginVertical: 5,
   },
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginBottom: 20,
+    marginTop: 50,
   },
   button: {
     backgroundColor: '#4f7bbd',
@@ -189,10 +238,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   continueButtonContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
     alignSelf: 'center',
-
   },
 });
 

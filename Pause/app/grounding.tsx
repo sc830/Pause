@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    fontSize: 24,
+    fontSize: 50,
     fontWeight: "bold",
     marginTop: 40,
     marginBottom: 20,
@@ -97,12 +97,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   questionContainer: {
-    marginBottom: 20,
+    marginBottom: 50,
+    marginTop: 30,
     width: "100%",
     alignItems: "center",
   },
   question: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 10,
     textAlign: "center",
     lineHeight: 25,

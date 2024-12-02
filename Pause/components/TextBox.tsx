@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     borderRadius: values.borderRadius,
     borderWidth: 0,
     flex: 1,
-    padding: 30,      
+    padding: 30,  
+    fontSize: 20,  
   }
 });
 
