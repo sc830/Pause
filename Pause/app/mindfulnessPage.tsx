@@ -26,6 +26,10 @@ const Mindfulness: React.FC = () => {
     <View style={styles.container}>
       <Timer initialTime={20} /> {/* Add Timer at the top */}
       <Text style={styles.header}>Mindfulness Exercises</Text>
+      <Text style={styles.subHeader}>
+        Read all the exercise instructions before you start.
+      </Text>
+
 
       {/* Scrollable container for exercises */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -84,6 +88,13 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: "bold",
     marginTop: 40,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  subHeader: {
+    fontSize: 20,
+    fontStyle: "italic",
+    color: "#555",
     marginBottom: 20,
     textAlign: "center",
   },
