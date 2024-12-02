@@ -13,6 +13,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox";
 import ContinueButton from "../components/ContinueButton";
+import Timer from "../components/Timer"; // Import Timer component
 
 const Mindfulness: React.FC = () => {
   const router = useRouter(); // Hook for navigation
@@ -39,6 +40,7 @@ const Mindfulness: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <Timer initialTime={20} /> {/* Add Timer at the top */}
       <Text style={styles.header}>Mindfulness Exercise</Text>
 
       {/* Render a TextBox for each question */}

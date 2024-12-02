@@ -1,24 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 interface TimerProps {
-  initialTime: number; //initial time duration in seconds
   onTimerEnd?: () => void;
 }
 
-const Timer: React.FC<TimerProps> = ({ initialTime, onTimerEnd }) => {
-  const [timeInSeconds, setTime] = useState<number>(initialTime);
+// Context for managing global timer state
+interface TimerContextProps {
+  isTimerVisible: boolean;
+  setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  timerDuration: number;
+  setTimerDuration: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const TimerContext = createContext<TimerContextProps | undefined>(undefined);
+
+export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isTimerVisible, setIsTimerVisible] = useState(false);
+  const [timerDuration, setTimerDuration] = useState(20); // Default timer duration
+
+  return (
+    <TimerContext.Provider
+      value={{
+        isTimerVisible,
+        setIsTimerVisible,
+        timerDuration,
+        setTimerDuration,
+      }}
+    >
+      {children}
+    </TimerContext.Provider>
+  );
+};
+
+export const useTimerContext = () => {
+  const context = useContext(TimerContext);
+  if (!context) {
+    throw new Error("useTimerContext must be used within a TimerProvider");
+  }
+  return context;
+};
+
+// Timer Component
+const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
+  const { isTimerVisible, timerDuration } = useTimerContext();
+  const [timeInSeconds, setTime] = useState(timerDuration);
 
   useEffect(() => {
-    let timer: number | undefined;
-    if (timeInSeconds > 0) {
+    setTime(timerDuration); // Reset timer whenever duration changes
+  }, [timerDuration]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (isTimerVisible && timeInSeconds > 0) {
       timer = setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000); // 1000 milliseconds = 1 second intervals
-    } else if (timeInSeconds === 0) {
-      if (onTimerEnd) {
-        onTimerEnd();
-      }
+        setTime((prev) => prev - 1);
+      }, 1000);
+    } else if (timeInSeconds === 0 && onTimerEnd) {
+      onTimerEnd();
     }
 
     return () => {
@@ -26,7 +65,9 @@ const Timer: React.FC<TimerProps> = ({ initialTime, onTimerEnd }) => {
         clearInterval(timer);
       }
     };
-  }, [timeInSeconds, onTimerEnd]);
+  }, [isTimerVisible, timeInSeconds, onTimerEnd]);
+
+  if (!isTimerVisible) return null;
 
   return (
     <View style={styles.container}>
@@ -37,7 +78,6 @@ const Timer: React.FC<TimerProps> = ({ initialTime, onTimerEnd }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     position: "absolute",
     top: 20,
     right: 20,
@@ -49,7 +89,7 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffff",
+    color: "#fff",
   },
 });
 

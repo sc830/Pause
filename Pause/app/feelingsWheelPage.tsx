@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router'; // Import useRouter for navigation
-
 import wheelImage from '../assets/images/feelingsWheel.jpg';
+import Timer from '../components/Timer'; // Import Timer Component
 import ContinueButton from '../components/ContinueButton';
 
 const FeelingsWheelPage: React.FC = () => {
@@ -21,7 +21,7 @@ const FeelingsWheelPage: React.FC = () => {
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/mindfulnessPage'); // Navigate to the Grounding Page
+      router.push('/mindfulnessPage'); // Navigate to the Mindfulness Page
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -87,11 +87,8 @@ const FeelingsWheelPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={wheelImage}
-        style={styles.wheelImage}
-        resizeMode="contain"
-      />
+      <Timer initialTime={20} /> {/* Add Timer at the top */}
+      <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
       <Text style={styles.instruction}>
         {!finalFeeling
           ? selectedEmotion
@@ -189,10 +186,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   continueButtonContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
     alignSelf: 'center',
-
   },
 });
 

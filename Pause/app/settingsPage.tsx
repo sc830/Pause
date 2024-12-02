@@ -1,69 +1,62 @@
 /*  settingsPage.tsx
 
     Functions:
-        allows user to manage monthly notifications
-        user has the ability to adjust timer settings
-        menu button directs user to journal screen and progress screen
+        - Allows user to manage monthly notifications
+        - User can toggle timer visibility
+        - User can toggle and set a variable timer
+        - Includes navigation to journal and progress screens
 */
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Switch, TextInput, Pressable } from "react-native";
+import { View, Text, StyleSheet, Switch, TextInput } from "react-native";
 import MenuButton from "@/components/MenuButton";
 import JournalButton from "@/components/JournalButton";
 import MonthlyProgressButton from "@/components/MonthlyProgressButton";
-import StyledButton from '@/components/StyledButton';
+import StyledButton from "@/components/StyledButton";
 import { useRouter } from "expo-router";
-import { userSignOut } from '@/constants/firebase'
+import { userSignOut } from "@/constants/firebase";
+import { useTimerContext } from "@/components/Timer"; // Import TimerContext hook
 
 const settingsPage = () => {
   const router = useRouter(); // Initialize router for navigation
+  const {
+    isTimerVisible,
+    setIsTimerVisible,
+    timerDuration,
+    setTimerDuration,
+  } = useTimerContext(); // Access timer context
 
-  const [isTimerVisible, setIsTimerVisible] = useState(false);
   const [isVariableTimer, setIsVariableTimer] = useState(false);
-  const [isTimerDuration, setIsTimerDuration] = useState("");
-  const [isMonthlyNotifications, setIsMonthlyNotifications] = useState(false);
-  const username = "username placeholder"; //to be replaced
-  const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
+  const [inputDuration, setInputDuration] = useState(timerDuration.toString()); // Sync input with the context
 
-  const toggleShowTimer = () =>
-    setIsTimerVisible((previousState) => !previousState);
-  const toggleVariableTimer = () =>
-    setIsVariableTimer((previousState) => !previousState);
-  const toggleMonthlyNotifications = () =>
-    setIsMonthlyNotifications((previousState) => !previousState);
-  const toggleDropdown = () => {
-    setShowDropdown((previousState) => !previousState);
+  const toggleShowTimer = () => {
+    setIsTimerVisible((prev) => !prev);
+  };
+
+  const toggleVariableTimer = () => setIsVariableTimer((prev) => !prev);
+
+  const handleTimerDurationChange = () => {
+    const duration = parseInt(inputDuration, 10);
+    if (isNaN(duration) || duration < 20) {
+      alert("Timer duration must be at least 20 seconds.");
+    } else {
+      setTimerDuration(duration);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Display Username */}
-      <Text style={styles.headerText}>{username}</Text>
-      <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
-
-      {/* Dropdown Menu */}
-      {showDropdown && (
-        <View style={styles.dropdown}>
-          <JournalButton
-            onPress={() => router.push("/journalPage")}
-            style={styles.dropdownButton}
-          />{" "}
-          {/* Navigate to Journal Page */}
-          <MonthlyProgressButton
-            onPress={() => console.log("Monthly Progress Pressed")}
-            style={styles.dropdownButton}
-          />
-        </View>
-      )}
+      <Text style={styles.headerText}>Settings</Text>
+      <MenuButton style={styles.menuButton} onPress={() => {}} />
 
       {/* Monthly Notifications */}
       <View style={styles.toggleRow}>
         <Text style={styles.label}>Monthly Notifications</Text>
         <Switch
-          value={isMonthlyNotifications}
-          onValueChange={toggleMonthlyNotifications}
+          value={false}
+          onValueChange={() => {}}
           trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isMonthlyNotifications ? "#f5dd4b" : "#f4f3f4"}
+          thumbColor={"#f5dd4b"}
         />
       </View>
 
@@ -95,34 +88,27 @@ const settingsPage = () => {
           <Text style={styles.label}>Timer Duration (in seconds)</Text>
           <TextInput
             style={styles.input}
-            value={isTimerDuration}
-            onChangeText={setIsTimerDuration}
+            value={inputDuration}
+            onChangeText={setInputDuration}
             placeholder="Enter duration"
-            keyboardType="numeric" //only numerical input
+            keyboardType="numeric"
+            onBlur={handleTimerDurationChange} // Apply the change on blur
           />
         </View>
-        
       )}
 
-      {/* Log Out */}
-      <View style={styles.toggleRow}>
-        <StyledButton
-          text = "Log Out"
-          buttonHeight={80}
-          buttonWidth={300}
-          onPress={() => {
-            handleLogOut(router);
+      <StyledButton
+        text="Log Out"
+        buttonHeight={80}
+        buttonWidth={300}
+        onPress={async () => {
+          await userSignOut();
+          router.push("/");
         }}
-        />
-      </View>
+      />
     </View>
   );
 };
-
-const handleLogOut = async (router: any) => {
-  await userSignOut();
-  router.push('/');
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -155,27 +141,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     borderRadius: 5,
+    width: 200,
   },
   menuButton: {
     position: "absolute",
     top: 20,
     right: 20,
-  },
-  dropdown: {
-    position: "absolute",
-    top: 70,
-    right: 20,
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  dropdownButton: {
-    marginVertical: 5,
   },
 });
 
