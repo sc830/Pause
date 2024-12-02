@@ -47,14 +47,35 @@ export default function Login() {
         return (
           <AuthProvider>
             <View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: 60,
+                  padding: 10,
+                }}
+              >
                 <Text>Please Log In</Text>
+              </View>
 
-                  <View style={{margin:10}}>
+                  <View 
+                    style={{
+                      margin:10,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <TextBox  text= "Email"
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
                     />
                   </View>
-                  <View style={{margin:10}}>
+                  <View 
+                    style={{
+                      margin:10,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <TextBox  text= "Password"  
                       secure={true}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, password: text }))}

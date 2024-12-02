@@ -12,7 +12,7 @@ import { Text, View, Button } from "react-native";
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 
-import ContinueButton from '@/components/ContinueButton';
+import StyledButton from '@/components/StyledButton';
 import '@/constants/global.css'; // Import global styles
 
 export default function Index() {
@@ -23,10 +23,24 @@ export default function Index() {
 
     if (!user) {
         return (
-            <View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: 60,
+                  padding: 10,
+                }}
+              >
                 <Text>Looks like you're not logged in. Let's fix that!</Text>
-                <Button
-                    title="Let's go"
+                </View>
+                <StyledButton
+                    text="Log in"
                     onPress={() => {
                         router.push('/login');
                     }}
@@ -47,7 +61,9 @@ export default function Index() {
             }}
           >
             <Text>Welcome to Pause. Let's get started!</Text>
-            <ContinueButton onPress={() => router.push('/feelingsWheelPage')} />
+            <StyledButton 
+              text="Let's go!"
+              onPress={() => router.push('/feelingsWheelPage')} />
         </View>
         )
     }

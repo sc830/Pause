@@ -34,7 +34,7 @@ interface StyledButtonProps {
 
 const StyledButton: React.FC<StyledButtonProps> = ({
   onPress,
-  buttonHeight = 200,
+  buttonHeight = 80,
   buttonWidth = 400,
   text = "Continue",
   color = colors.yellow,
