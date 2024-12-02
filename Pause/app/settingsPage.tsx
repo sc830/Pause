@@ -7,11 +7,13 @@
 */
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Switch, TextInput } from "react-native";
+import { View, Text, StyleSheet, Switch, TextInput, Pressable } from "react-native";
 import MenuButton from "@/components/MenuButton";
 import JournalButton from "@/components/JournalButton";
 import MonthlyProgressButton from "@/components/MonthlyProgressButton";
+import StyledButton from '@/components/StyledButton';
 import { useRouter } from "expo-router";
+import { userSignOut } from '@/constants/firebase'
 
 const settingsPage = () => {
   const router = useRouter(); // Initialize router for navigation
@@ -99,10 +101,28 @@ const settingsPage = () => {
             keyboardType="numeric" //only numerical input
           />
         </View>
+        
       )}
+
+      {/* Log Out */}
+      <View style={styles.toggleRow}>
+        <StyledButton
+          text = "Log Out"
+          buttonHeight={80}
+          buttonWidth={300}
+          onPress={() => {
+            handleLogOut(router);
+        }}
+        />
+      </View>
     </View>
   );
 };
+
+const handleLogOut = async (router: any) => {
+  await userSignOut();
+  router.push('/');
+}
 
 const styles = StyleSheet.create({
   container: {

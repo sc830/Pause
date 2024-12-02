@@ -15,7 +15,9 @@ const firebaseConfig = {
   databaseURL: "https://pause-a22f0.firebaseio.com"
 };
 
-// Initialize Firebase app (this is necessary only once)
-const app = initializeApp(firebaseConfig);
+  // Initialize Firebase app (this is necessary only once)
+  const app = initializeApp(firebaseConfig);
+  const firestore = getFirestore(app);
+  const auth = getAuth(app);
 
-export { app, getAuth, getFirestore, getAnalytics };
+  export { app, auth, firestore, getAnalytics };

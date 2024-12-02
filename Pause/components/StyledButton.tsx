@@ -41,7 +41,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 }) => {
 
   return (
-    <Pressable style={[styles.button, {backgroundColor: color, height: buttonHeight, width: buttonWidth, position: 'absolute'}]}     onPress={onPress}>
+    <Pressable style={[styles.button, {backgroundColor: color, height: buttonHeight, width: buttonWidth}]}     onPress={onPress}>
       <Text style={reusedStyles.buttonTextStyle}>{text}</Text>
     </Pressable>
   );
