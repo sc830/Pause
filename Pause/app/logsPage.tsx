@@ -80,9 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 40,
     fontWeight: "bold",
     marginBottom: 20,
     marginTop: 40,

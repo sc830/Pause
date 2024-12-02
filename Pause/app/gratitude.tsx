@@ -78,16 +78,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
+    backgroundColor: "#fff"
   },
   header: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "bold",
     marginBottom: 20,
     marginTop: 40,
     textAlign: "center",
   },
   subHeader: {
-    fontSize: 16,
+    fontSize: 20,
     fontStyle: "italic",
     color: "#555",
     marginBottom: 20,
@@ -106,7 +107,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginBottom: 50,
+    marginTop: 20,
     width: "-90%",
   },
   number: {

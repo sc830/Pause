@@ -36,6 +36,7 @@ const reusedStyles = StyleSheet.create({
     borderWidth: 0,
     flex: 1,
     padding: 30,
+    fontSize: 20,
   },
   textStyle: {
     fontSize: 16,

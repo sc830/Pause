@@ -115,9 +115,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 40,
     fontWeight: "bold",
     marginBottom: 20,
   },

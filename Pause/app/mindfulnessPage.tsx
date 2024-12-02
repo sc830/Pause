@@ -25,12 +25,12 @@ const Mindfulness: React.FC = () => {
   return (
     <View style={styles.container}>
       <Timer initialTime={20} /> {/* Add Timer at the top */}
-      <Text style={styles.header}>Mindfulness Exercise</Text>
+      <Text style={styles.header}>Mindfulness Exercises</Text>
 
       {/* Scrollable container for exercises */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.exerciseContainer}>
-          <Text style={styles.exerciseTitle}>Exercise 1</Text>
+          <Text style={styles.exerciseTitle}>Exercise 1: Breathing</Text>
           <Text style={styles.exerciseText}>
             Close your eyes and take a deep breath in through your nose.
           </Text>
@@ -49,7 +49,7 @@ const Mindfulness: React.FC = () => {
         </View>
 
         <View style={styles.exerciseContainer}>
-          <Text style={styles.exerciseTitle}>Exercise 2</Text>
+          <Text style={styles.exerciseTitle}>Exercise 2: Visualization</Text>
           <Text style={styles.exerciseText}>
             Close your eyes and create a mental picture of a peaceful scene that makes you happy.
           </Text>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    fontSize: 24,
+    fontSize: 50,
     fontWeight: "bold",
     marginTop: 40,
     marginBottom: 20,
@@ -92,16 +92,17 @@ const styles = StyleSheet.create({
   },
   exerciseContainer: {
     marginBottom: 30,
+    marginTop: 50,
     alignItems: "center",
   },
   exerciseTitle: {
-    fontSize: 20,
+    fontSize: 40,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 50,
     textAlign: "center",
   },
   exerciseText: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: "center",
     lineHeight: 24,
     paddingHorizontal: 10,
