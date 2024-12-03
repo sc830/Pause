@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { AuthProvider } from "@/contexts/AuthContext"; // Wrap the app in AuthProvider
-import { TimerProvider } from "@/components/Timer"; // Import TimerProvider
+import { AuthProvider } from "@/contexts/AuthContext";
+import { TimerProvider } from "@/components/Timer";
 
 export default function RootLayout() {
   return (

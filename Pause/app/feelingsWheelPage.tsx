@@ -91,8 +91,8 @@ const FeelingsWheelPage: React.FC = () => {
 
  return (
   <View style={styles.masterContainer}>
+    <Timer initialTime={20} /> {/* Add Timer at the top */}
     <View style={styles.container}>
-      <Timer initialTime={20} /> {/* Add Timer at the top */}
         <View style={styles.columnContainer}>
           <View style={[styles.columnSubContainer, {flex:4}]}>
             <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
