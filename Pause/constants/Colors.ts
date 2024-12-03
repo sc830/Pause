@@ -1,12 +1,32 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+/* Colors.ts
+
+  Props:  none
+
+  Export: color palette as named colors
+
+  Functions:  allow access to standard colors by name
+
+  Usage: add import statement in any other file and reference colors by name
+    import colors from '@/constants/Colors'
+    style={{ backgroundColor: colors.yellow }}
+
+  References:
+    Altered from Expo-initialized Colors.ts
+    Referenced ChatGPT for layout and export to other files
+*/
 
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const Colors = {
+const colors = {
+  yellow: '#FAF0DA',
+  green: '#C9E4DE',
+  blue: '#A9D1D9',
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#757575',
+
+  // dark and light full component styles
   light: {
     text: '#11181C',
     background: '#fff',
@@ -23,4 +43,5 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
-};
+}; 
+export default colors;
