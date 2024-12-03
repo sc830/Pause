@@ -37,7 +37,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
   buttonHeight = 80,
   buttonWidth = 400,
   text = "Continue",
-  color = colors.yellow,
+  color = colors.green,
 }) => {
 
   return (

@@ -9,16 +9,13 @@
 
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch, TextInput } from "react-native";
-import MenuButton from "@/components/MenuButton";
-import JournalButton from "@/components/JournalButton";
-import MonthlyProgressButton from "@/components/MonthlyProgressButton";
 import StyledButton from "@/components/StyledButton";
 import { useRouter } from "expo-router";
 import { userSignOut } from "@/constants/firebase";
 import { useTimerContext } from "@/components/Timer"; // Import TimerContext hook
 
-const settingsPage = () => {
-  const router = useRouter(); // Initialize router for navigation
+const SettingsPage = () => {
+  const router = useRouter();
   const {
     isTimerVisible,
     setIsTimerVisible,
@@ -47,7 +44,6 @@ const settingsPage = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Settings</Text>
-      <MenuButton style={styles.menuButton} onPress={() => {}} />
 
       {/* Monthly Notifications */}
       <View style={styles.toggleRow}>
@@ -97,6 +93,7 @@ const settingsPage = () => {
         </View>
       )}
 
+      {/* Log Out Button */}
       <StyledButton
         text="Log Out"
         buttonHeight={80}
@@ -144,11 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 200,
   },
-  menuButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
 });
 
-export default settingsPage;
+export default SettingsPage;

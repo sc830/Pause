@@ -12,10 +12,11 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import ContinueButton from "../components/ContinueButton";
-import Timer from "../components/Timer"; // Import Timer component
+import Timer, { useTimerContext } from "../components/Timer"; // Import Timer component and context
 
 const Mindfulness: React.FC = () => {
   const router = useRouter(); // Hook for navigation
+  const { timerEnded } = useTimerContext(); // Access timerEnded from TimerContext
 
   const handleContinue = () => {
     console.log("User has completed mindfulness exercises."); // Log user action
@@ -24,12 +25,11 @@ const Mindfulness: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Timer initialTime={20} /> {/* Add Timer at the top */}
+      <Timer /> {/* Add Timer at the top */}
       <Text style={styles.header}>Mindfulness Exercises</Text>
       <Text style={styles.subHeader}>
         Read all the exercise instructions before you start.
       </Text>
-
 
       {/* Scrollable container for exercises */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -71,7 +71,7 @@ const Mindfulness: React.FC = () => {
 
       {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} />
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} /> {/* Disable button until timer ends */}
       </View>
     </View>
   );
@@ -100,6 +100,8 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 100, // Space for the fixed Continue button
+    alignItems: "center",
+    paddingHorizontal: 200,
   },
   exerciseContainer: {
     marginBottom: 30,

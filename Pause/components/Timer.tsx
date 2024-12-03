@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Colors from '@/constants/Colors';
 
 interface TimerProps {
   onTimerEnd?: () => void;
@@ -11,6 +12,7 @@ interface TimerContextProps {
   setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
   timerDuration: number;
   setTimerDuration: React.Dispatch<React.SetStateAction<number>>;
+  timerEnded: boolean; // Track if the timer has ended
 }
 
 const TimerContext = createContext<TimerContextProps | undefined>(undefined);
@@ -18,6 +20,7 @@ const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isTimerVisible, setIsTimerVisible] = useState(false);
   const [timerDuration, setTimerDuration] = useState(20); // Default timer duration
+  const [timerEnded, setTimerEnded] = useState(false); // New state for timer end
 
   return (
     <TimerContext.Provider
@@ -26,6 +29,8 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsTimerVisible,
         timerDuration,
         setTimerDuration,
+        timerEnded,
+        setTimerEnded,
       }}
     >
       {children}
@@ -43,12 +48,13 @@ export const useTimerContext = () => {
 
 // Timer Component
 const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
-  const { isTimerVisible, timerDuration } = useTimerContext();
+  const { isTimerVisible, timerDuration, setTimerEnded } = useTimerContext();
   const [timeInSeconds, setTime] = useState(timerDuration);
 
   useEffect(() => {
     setTime(timerDuration); // Reset timer whenever duration changes
-  }, [timerDuration]);
+    setTimerEnded(false); // Reset `timerEnded` when timer restarts
+  }, [timerDuration, setTimerEnded]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -56,8 +62,9 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
       timer = setInterval(() => {
         setTime((prev) => prev - 1);
       }, 1000);
-    } else if (timeInSeconds === 0 && onTimerEnd) {
-      onTimerEnd();
+    } else if (timeInSeconds === 0) {
+      setTimerEnded(true); // Mark timer as ended
+      if (onTimerEnd) onTimerEnd();
     }
 
     return () => {
@@ -65,7 +72,7 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
         clearInterval(timer);
       }
     };
-  }, [isTimerVisible, timeInSeconds, onTimerEnd]);
+  }, [isTimerVisible, timeInSeconds, setTimerEnded, onTimerEnd]);
 
   if (!isTimerVisible) return null;
 
@@ -80,16 +87,17 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     top: 20,
-    right: 20,
+    right: 10,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(56, 193, 234, 0.64)",
+    zIndex: 10,
+    backgroundColor: Colors.green,
   },
   timerText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
   },
 });
 

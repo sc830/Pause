@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
   menuButton: {
     position: "absolute",
     top: 20,
-    right: 20,
+    left: 20,
   },
   dropdown: {
     position: "absolute",
     top: 70,
-    right: 20,
+    left: 20,
     backgroundColor: "white",
     padding: 10,
     borderRadius: 8,
