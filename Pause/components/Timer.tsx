@@ -11,15 +11,16 @@ interface TimerContextProps {
   setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
   timerDuration: number;
   setTimerDuration: React.Dispatch<React.SetStateAction<number>>;
-  timerEnded: boolean; // Track if the timer has ended
+  timerEnded: boolean;
+  setTimerEnded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isTimerVisible, setIsTimerVisible] = useState(false);
+  const [isTimerVisible, setIsTimerVisible] = useState(true);
   const [timerDuration, setTimerDuration] = useState(20); // Default timer duration
-  const [timerEnded, setTimerEnded] = useState(false); // New state for timer end
+  const [timerEnded, setTimerEnded] = useState(false); // State to track if timer has ended
 
   return (
     <TimerContext.Provider
@@ -50,11 +51,13 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
   const { isTimerVisible, timerDuration, setTimerEnded } = useTimerContext();
   const [timeInSeconds, setTime] = useState(timerDuration);
 
+  // Sync local state with global duration when timerDuration changes
   useEffect(() => {
-    setTime(timerDuration); // Reset timer whenever duration changes
-    setTimerEnded(false); // Reset `timerEnded` when timer restarts
+    setTime(timerDuration);
+    setTimerEnded(false); // Reset timerEnded when timer resets
   }, [timerDuration, setTimerEnded]);
 
+  // Timer countdown logic
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
     if (isTimerVisible && timeInSeconds > 0) {
@@ -62,17 +65,16 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
         setTime((prev) => prev - 1);
       }, 1000);
     } else if (timeInSeconds === 0) {
-      setTimerEnded(true); // Mark timer as ended
-      if (onTimerEnd) onTimerEnd();
+      setTimerEnded(true); // Mark the timer as ended
+      if (onTimerEnd) onTimerEnd(); // Trigger optional onTimerEnd callback
     }
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      if (timer) clearInterval(timer);
     };
   }, [isTimerVisible, timeInSeconds, setTimerEnded, onTimerEnd]);
 
+  // Hide the timer if it's not visible
   if (!isTimerVisible) return null;
 
   return (

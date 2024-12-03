@@ -8,30 +8,41 @@
         Continue button is used to navigate to the next screen
 */
 
-import React from "react";
+import React, { useCallback, useState  } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import ContinueButton from "../components/ContinueButton";
-import Timer, { useTimerContext } from "../components/Timer"; // Import Timer component and context
+import Timer, { useTimerContext } from "../components/Timer";
 
 const Mindfulness: React.FC = () => {
-  const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext(); // Access timerEnded from TimerContext
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setTimerDuration(20); // Reset the global timer duration
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+  );
 
   const handleContinue = () => {
-    console.log("User has completed mindfulness exercises."); // Log user action
-    router.push("/grounding"); // Navigate to the grounding page
+    console.log("User has completed mindfulness exercises.");
+    router.push("/grounding"); // Navigate to the next page
   };
 
   return (
     <View style={styles.container}>
-      <Timer /> {/* Add Timer at the top */}
+      <Timer key={timerKey} />
       <Text style={styles.header}>Mindfulness Exercises</Text>
       <Text style={styles.subHeader}>
         Read all the exercise instructions before you start.
       </Text>
 
-      {/* Scrollable container for exercises */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.exerciseContainer}>
           <Text style={styles.exerciseTitle}>Exercise 1: Breathing</Text>
@@ -39,39 +50,26 @@ const Mindfulness: React.FC = () => {
             Close your eyes and take a deep breath in through your nose.
           </Text>
           <Text style={styles.exerciseText}>
-            Fill your lungs with the air and let your belly push out as you inhale.
+            Hold this breath for 2 seconds and then slowly breathe out.
           </Text>
           <Text style={styles.exerciseText}>
-            Hold this breath for 2 seconds and then slowly breathe the air out through your mouth, allowing your tummy to deflate.
-          </Text>
-          <Text style={styles.exerciseText}>
-            Let your shoulders and face relax as you breathe out.
-          </Text>
-          <Text style={styles.exerciseText}>
-            Repeat this activity two more times and then move to exercise two.
+            Let your shoulders and face relax as you breathe out. Repeat this activity two more times.
           </Text>
         </View>
 
         <View style={styles.exerciseContainer}>
           <Text style={styles.exerciseTitle}>Exercise 2: Visualization</Text>
           <Text style={styles.exerciseText}>
-            Close your eyes and create a mental picture of a peaceful scene that makes you happy.
+            Close your eyes and imagine a peaceful scene that makes you happy.
           </Text>
           <Text style={styles.exerciseText}>
-            This could be a visualization of a place in nature or even a person or animal.
-          </Text>
-          <Text style={styles.exerciseText}>
-            Be specific in your visualization.
-          </Text>
-          <Text style={styles.exerciseText}>
-            Hold onto this image for as long as you'd like to and then press continue when you are ready to proceed through the application.
+            Hold onto this image for as long as you'd like and press continue when ready.
           </Text>
         </View>
       </ScrollView>
 
-      {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} disabled={!timerEnded} /> {/* Disable button until timer ends */}
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
       </View>
     </View>
   );
@@ -99,9 +97,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   scrollContainer: {
-    paddingBottom: 100, // Space for the fixed Continue button
+    paddingBottom: 100,
     alignItems: "center",
-    paddingHorizontal: 200,
   },
   exerciseContainer: {
     marginBottom: 30,
@@ -118,8 +115,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     lineHeight: 24,
-    paddingHorizontal: 10,
-    marginBottom: 10, // Space between sentences
   },
   continueButtonContainer: {
     position: "absolute",

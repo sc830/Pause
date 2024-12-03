@@ -8,7 +8,8 @@
         - Continue button is used to navigate to the next screen.
 */
 
-import React, { useState } from "react";
+import React, { useCallback,useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox"; // Single import for TextBox
@@ -17,7 +18,19 @@ import Timer, { useTimerContext } from "../components/Timer";
 
 const Grounding: React.FC = () => {
   const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setTimerDuration(20); // Reset the global timer duration
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+  );
+
 
   const groundingQuestions = [
     "What is one thing that you can see in the space around you?",
@@ -50,7 +63,7 @@ const Grounding: React.FC = () => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <Timer />
+      <Timer key={timerKey} />
       <Text style={styles.header}>Grounding Exercise</Text>
 
       {/* Scrollable container for questions */}

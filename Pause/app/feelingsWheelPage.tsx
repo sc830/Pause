@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback,useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router'; // Import useRouter for navigation
 import wheelImage from '../assets/images/feelingsWheel.png';
 import Timer, { useTimerContext } from "../components/Timer"; 
 import ContinueButton from '../components/ContinueButton';
-import MenuButton from "@/components/MenuButton";
-import SettingsButton from "@/components/SettingsButton";
-import JournalButton from "@/components/JournalButton";
-import MonthlyProgressButton from "@/components/MonthlyProgressButton";
+
 
 // constants
 import Colors from '@/constants/Colors';
@@ -17,10 +15,21 @@ const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
-  const [showDropdown, setShowDropdown] = useState(false);
+ 
 
   const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setTimerDuration(20); // Reset the global timer duration
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+  );
 
   const resetSelection = () => {
     setSelectedEmotion(null);
@@ -28,9 +37,7 @@ const FeelingsWheelPage: React.FC = () => {
     setFinalFeeling(null);
   };
 
-  const toggleDropdown = () => {
-    setShowDropdown((prev) => !prev); // Toggle dropdown visibility
-  };
+  
 
 
   const handleContinue = () => {
@@ -103,27 +110,8 @@ const FeelingsWheelPage: React.FC = () => {
  return (
   <View style={styles.masterContainer}>
     <View style={styles.container}>
-      <Timer/> {/* Add Timer at the top */}
-       <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
-
-      {/* Dropdown Menu */}
-      {showDropdown && (
-        <View style={styles.dropdown}>
-          <SettingsButton
-            onPress={() => router.push("/settingsPage")}
-            style={styles.dropdownButton}
-          />
-          <JournalButton
-            onPress={() => router.push("/journalPage")}
-            style={styles.dropdownButton}
-          />
-          <MonthlyProgressButton
-            onPress={() => console.log("Monthly Progress Pressed")}
-            style={styles.dropdownButton}
-          />
-        </View>
-      )}
-
+      <Timer key={timerKey} />
+       
       {/* Main Content */}
         <View style={styles.columnContainer}>
           <View style={[styles.columnSubContainer, {flex:4}]}>
@@ -243,30 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     paddingTop: 20
   },
-  menuButton: {
-    position: "absolute",
-    top: 0,
-    left: 5,
-    zIndex: 10,
-  },
-  dropdown: {
-    position: "absolute",
-    top: 60,
-    left: 5,
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-     zIndex: 10,
-  },
-  dropdownButton: {
-    marginVertical: 5,
-   
-  },
+  
   container: {
     flex: 1,
     flexDirection: 'column',
