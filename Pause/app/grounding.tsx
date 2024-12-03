@@ -13,10 +13,11 @@ import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } fr
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox"; // Single import for TextBox
 import ContinueButton from "../components/ContinueButton";
-import Timer from "@/components/Timer";
+import Timer, { useTimerContext } from "../components/Timer";
 
 const Grounding: React.FC = () => {
   const router = useRouter(); // Hook for navigation
+  const { timerEnded } = useTimerContext();
 
   const groundingQuestions = [
     "What is one thing that you can see in the space around you?",
@@ -49,7 +50,7 @@ const Grounding: React.FC = () => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <Timer initialTime={20} />
+      <Timer />
       <Text style={styles.header}>Grounding Exercise</Text>
 
       {/* Scrollable container for questions */}
@@ -70,7 +71,7 @@ const Grounding: React.FC = () => {
 
       {/* Fixed Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} />
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
       </View>
     </KeyboardAvoidingView>
   );

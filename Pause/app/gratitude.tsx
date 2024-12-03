@@ -13,10 +13,11 @@ import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 import AddButton from "@/components/AddButton";
-import Timer from "@/components/Timer";
+import Timer, { useTimerContext } from "../components/Timer"; 
 
 export function Gratitude() {
   const router = useRouter(); // Hook for navigation
+  const { timerEnded } = useTimerContext();
   const [textInputs, setTextInputs] = useState<string[]>(["", "", ""]);
 
   const handleAddTextBox = () => {
@@ -36,7 +37,7 @@ export function Gratitude() {
 
   return (
     <View style={styles.container}>
-      <Timer initialTime={20}></Timer>
+      <Timer />
       <Text style={styles.header}>
         List three things that you are grateful for:
       </Text>
@@ -67,7 +68,7 @@ export function Gratitude() {
       </ScrollView>
 
       {/* Continue Button */}
-      <ContinueButton onPress={handleContinue} />
+      <ContinueButton onPress={handleContinue} disabled={!timerEnded}/>
     </View>
   );
 }
@@ -101,7 +102,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     alignItems: "center",
-    paddingVertical: 10,
+    //paddingVertical: 10,
+    paddingBottom: 100,
   },
   textBoxContainer: {
     flexDirection: "row",
@@ -116,7 +118,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   addButton: {
-    marginTop: 10, // Add space between the last text box and the button
+    marginTop: 5, // Add space between the last text box and the button
+    
   },
 });
 
