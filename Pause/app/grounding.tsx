@@ -71,8 +71,6 @@ const Grounding: React.FC = () => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Timer key={timerKey} />
-      <Text style={styles.header}>Grounding Exercise</Text>
-      <Timer />
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Grounding Exercise</Text>
       </View>

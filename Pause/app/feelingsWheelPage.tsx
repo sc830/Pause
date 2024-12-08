@@ -202,7 +202,7 @@ const FeelingsWheelPage: React.FC = () => {
                     <Pressable
                       key={emotion}
                       style={styles.button}
-                      onPress={() => setSelectedEmotion(emotion)}
+                      onPress={() => handleEmotionSelect(emotion)}
                     >
                       <Text style={styles.buttonText}>{emotion}</Text>
                     </Pressable>
@@ -226,7 +226,7 @@ const FeelingsWheelPage: React.FC = () => {
                     <Pressable
                       key={deeperFeeling}
                       style={styles.button}
-                      onPress={() => setFinalFeeling(deeperFeeling)}
+                      onPress={() => handleFinalFeelingSelect(deeperFeeling)}
                     >
                       <Text style={styles.buttonText}>{deeperFeeling}</Text>
                     </Pressable>

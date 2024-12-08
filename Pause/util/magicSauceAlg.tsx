@@ -16,7 +16,7 @@ export function magicSauceAlg(selectedEmotion: string, timeTaken: number): numbe
   const baseTime = emotionWeights[selectedEmotion] || 1; // Default weight is 1 for undefined emotions
 
   // Scale time more softly, avoiding immediate aggressive clamping
-  let scaledTime = timeTaken * 0.5;
+  let scaledTime = timeTaken * 0.4;
 
   if (scaledTime < 20) {
     scaledTime = 20 + (scaledTime / 2); // Adjust low times gently

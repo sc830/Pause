@@ -54,8 +54,8 @@ export const useTimerContext = () => {
 
 // Timer Component
 const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
-  const { isTimerVisible, timerDuration, setTimerEnded } = useTimerContext();
-  const [timeInSeconds, setTime] = useState(timerDuration || 0);
+  const { isTimerVisible, timerDuration, setTimerEnded, isVariableTimer } = useTimerContext();
+  const [timeInSeconds, setTime] = useState(timerDuration || 15);
 
   // Sync local state with global duration when timerDuration changes
   useEffect(() => {
