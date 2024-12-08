@@ -13,7 +13,7 @@ interface MenuButtonProps {
 const MenuButton: React.FC<MenuButtonProps> = ({
   onPress,
   style,
-  altText = "Whoops, we forgot to fill in the alt text.",
+  altText = "Menu icon",
 }) => {
   return (
     <Pressable
@@ -22,7 +22,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
     >
       <Image
         source={settingsIcon}
-        style={{ width: 50, height: 50 }}
+        style={{ width: 38, height: 38 }}
         resizeMode="contain"
         accessible
         accessibilityLabel={altText}

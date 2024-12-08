@@ -8,70 +8,90 @@
         Continue button is used to navigate to the next screen
 */
 
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import ContinueButton from "../components/ContinueButton";
-import Timer from "../components/Timer"; // Import Timer component
+import Timer, { useTimerContext } from "@/components/Timer"; // Import Timer component and context
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const Mindfulness: React.FC = () => {
-  const router = useRouter(); // Hook for navigation
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setIsTimerVisible, setTimerEnded])
+  );
 
   const handleContinue = () => {
-    console.log("User has completed mindfulness exercises."); // Log user action
-    router.push("/grounding"); // Navigate to the grounding page
+    console.log("User has completed mindfulness exercises.");
+    console.log(`Timer duration was: ${timerDuration}s`); // Log the timer duration for debugging
+    router.push("/grounding"); // Navigate to the next page
   };
 
   return (
-    <View style={styles.container}>
-      <Timer initialTime={20} /> {/* Add Timer at the top */}
-      <Text style={styles.header}>Mindfulness Exercises</Text>
-      <Text style={styles.subHeader}>
-        Read all the exercise instructions before you start.
-      </Text>
-
+    <View style={[styles.container, {backgroundColor:Colors.blue}]}>
+      <Timer key={timerKey}/> {/* Add Timer at the top */}
+      <View style={styles.headerContainer}>
+          <Text style={styles.header}>Mindfulness Exercises</Text>
+          <Text style={styles.subHeader}>
+            Be sure to read the exercise's instructions before you start.
+          </Text>
+      </View>
 
       {/* Scrollable container for exercises */}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.scrollContainer, {backgroundColor:Colors.blue}]}
+      >
         <View style={styles.exerciseContainer}>
           <Text style={styles.exerciseTitle}>Exercise 1: Breathing</Text>
           <Text style={styles.exerciseText}>
-            Close your eyes and take a deep breath in through your nose.
+            Close your eyes and take a deep breath.
           </Text>
           <Text style={styles.exerciseText}>
-            Fill your lungs with the air and let your belly push out as you inhale.
+            Let your belly expand as you inhale.
           </Text>
           <Text style={styles.exerciseText}>
-            Hold this breath for 2 seconds and then slowly breathe the air out through your mouth, allowing your tummy to deflate.
+            Hold this breath for a moment, then breathe out, allowing your tummy deflate.
           </Text>
           <Text style={styles.exerciseText}>
             Let your shoulders and face relax as you breathe out.
           </Text>
           <Text style={styles.exerciseText}>
-            Repeat this activity two more times and then move to exercise two.
+            Repeat this activity a few more times, allowing your body to slowly relax.
           </Text>
         </View>
 
         <View style={styles.exerciseContainer}>
           <Text style={styles.exerciseTitle}>Exercise 2: Visualization</Text>
           <Text style={styles.exerciseText}>
-            Close your eyes and create a mental picture of a peaceful scene that makes you happy.
+            Close your eyes and mentally visualize a peaceful and relaxing scene.
           </Text>
           <Text style={styles.exerciseText}>
-            This could be a visualization of a place in nature or even a person or animal.
+            You may envision a tranquil landscape, a cozy room with a crackling fire, or anything else that makes you feel safe.
           </Text>
           <Text style={styles.exerciseText}>
-            Be specific in your visualization.
-          </Text>
-          <Text style={styles.exerciseText}>
-            Hold onto this image for as long as you'd like to and then press continue when you are ready to proceed through the application.
+            Hold onto this image for as long as you'd like.
           </Text>
         </View>
+
+        <Text style={[styles.exerciseTitle, {fontSize: 30, fontWeight: 400, marginTop: 40, marginBottom: 20 }]}>
+            When you're relaxed and ready to proceed, press continue.
+          </Text>
       </ScrollView>
 
-      {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} />
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} /> {/* Disable button until timer ends */}
       </View>
     </View>
   );
@@ -85,43 +105,55 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    fontSize: 50,
-    fontWeight: "bold",
-    marginTop: 40,
-    marginBottom: 20,
+    fontSize: 40,
+    fontWeight: 600,
+    textAlign: "center",
+  },
+  headerContainer: {
+    fontSize: 40,
+    fontWeight: 600,
+    borderRadius:Values.borderRadius, 
+    borderColor:Colors.green, 
+    borderWidth:0, 
+    backgroundColor: Colors.green,
+    padding:20,
+    paddingHorizontal:200,
+    width: 2400,
+    marginTop: -5,
     textAlign: "center",
   },
   subHeader: {
     fontSize: 20,
     fontStyle: "italic",
     color: "#555",
-    marginBottom: 20,
     textAlign: "center",
   },
   scrollContainer: {
-    paddingBottom: 100, // Space for the fixed Continue button
+    paddingBottom: 60, // Space for the fixed Continue button
+    alignItems: "center",
   },
   exerciseContainer: {
-    marginBottom: 30,
-    marginTop: 50,
+    marginBottom: 20,
+    marginTop: 20,
     alignItems: "center",
   },
   exerciseTitle: {
-    fontSize: 40,
-    fontWeight: "bold",
-    marginBottom: 50,
+    fontSize: 35,
+    fontWeight: 600,
+    marginBottom: 20,
     textAlign: "center",
   },
   exerciseText: {
     fontSize: 20,
     textAlign: "center",
     lineHeight: 24,
-    paddingHorizontal: 10,
-    marginBottom: 10, // Space between sentences
   },
   continueButtonContainer: {
-    position: "absolute",
-    bottom: 20,
+    backgroundColor: Colors.blue,
+    marginTop: 0,
+    marginBottom: 10,
+    paddingTop: 60,
+    paddingBottom: 20,
     alignSelf: "center",
   },
 });

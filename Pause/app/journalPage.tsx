@@ -20,6 +20,8 @@ import {
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox";
 import ContinueButton from "../components/ContinueButton";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const JournalPage: React.FC = () => {
   const router = useRouter(); // Initialize router for navigation
@@ -33,13 +35,13 @@ const JournalPage: React.FC = () => {
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.header}>Create a New Journal Entry</Text>
+        <Text style={styles.header}>New Journal Entry</Text>
 
         {/* TextBox Component */}
         <TextBox
           boxHeight={200} // Adjust height to fit your layout
-          boxWidth={500} // Dynamic width as percentage
-          color="#f8f9fa" // Light background color
+          boxWidth={800} // Dynamic width as percentage
+          color={Colors.green}
         />
       </ScrollView>
 
@@ -57,19 +59,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   scrollContainer: {
+    backgroundColor: Colors.blue,
     flexGrow: 1,
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
     marginBottom: 20,
-    marginTop: 40,
     paddingBottom: 80, // Ensures the content doesn't overlap the button
   },
   header: {
     fontSize: 40,
+    fontWeight: 600,
+    marginBottom: 20,
+    marginTop: 20,
+    textAlign: "center",
+  },
+  headerContainer: {
     fontWeight: "bold",
     marginBottom: 20,
-    marginTop: 5,
+    marginTop: 20,
     textAlign: "center",
   },
   continueButtonContainer: {

@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     useEffect(() => {
-        setPersistence(auth, browserSessionPersistence);
+        setPersistence(auth, browserLocalPersistence);
         const subscriber = onAuthStateChanged(auth, onAuthStateChangedHandler); // Listen for auth state changes
         return () => subscriber(); // Unsubscribe when the component is unmounted
     }, []);

@@ -30,21 +30,24 @@ interface ContinueButtonProps {
   onPress?: () => void;
   text?: string;
   color?: string;
+  disabled?: boolean; 
 }
 
 const ContinueButton: React.FC<ContinueButtonProps> = ({
   onPress,
   text = "Continue",
-  color = colors.yellow,
+  color = colors.green,
+  disabled = false, // Default to not disabled
 }) => {
   const { width, height } = Dimensions.get('window');
   const insets = useSafeAreaInsets();                 // Get safe area insets
-  const buttonHeight = height*.04 + insets.top;        // 10% screen height + safe area top inset
+  const buttonHeight = height*.07 + insets.top;        // 10% screen height + safe area top inset
   const buttonWidth = width*values.componentWidth;                       // 90% width of screen
   const leftPosition = (width*.05)/2;                  // compute left margin
 
   return (
-    <Pressable style={[styles.button, {backgroundColor: color, height: buttonHeight, width: buttonWidth, position: 'absolute', bottom:insets.bottom, marginBottom: 10}]}     onPress={onPress}>
+    <Pressable style={[styles.button, {backgroundColor: color, opacity: disabled ? 0.6 : 1 ,height: buttonHeight, width: buttonWidth, position: 'absolute', bottom:insets.bottom, marginBottom: 10}]}                
+      onPress={!disabled ? onPress : undefined} >
       <Text style={reusedStyles.buttonTextStyle}>{text}</Text>
     </Pressable>
   );

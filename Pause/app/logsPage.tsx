@@ -15,6 +15,8 @@ import DateButton from "@/components/DateButton";
 import SettingsButton from "@/components/SettingsButton";
 import JournalButton from "@/components/JournalButton";
 import MonthlyProgressButton from "@/components/MonthlyProgressButton";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 export default function LogsPage() {
   const [dates, setDates] = useState<string[]>([]); // Store dates
@@ -33,9 +35,6 @@ export default function LogsPage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>
-        Choose A Date to View Past Responses:
-      </Text>
       <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
 
       {/* Dropdown Menu */}
@@ -58,6 +57,10 @@ export default function LogsPage() {
         </View>
       )}
 
+      <Text style={styles.headerText}>
+        Choose A Date to View Past Responses:
+      </Text>
+
       {/* Render Date Buttons */}
       <FlatList
         data={dates}
@@ -66,7 +69,7 @@ export default function LogsPage() {
           <DateButton
             date={item}
             onPress={() => console.log(`View activities for ${item}`)}
-            style={styles.dateButton}
+            style={[styles.dateButton, {backgroundColor:Colors.green, height:60, width:400, marginVertical:5}]}
           />
         )}
         contentContainerStyle={styles.dateButtonList}
@@ -80,31 +83,30 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.blue,
   },
   headerText: {
     fontSize: 40,
-    fontWeight: "bold",
+    fontWeight: 600,
     marginBottom: 20,
     marginTop: 40,
   },
   menuButton: {
     position: "absolute",
-    top: 20,
-    right: 20,
+    backgroundColor: Colors.green,
+    zIndex: 10,
+    top: 10,
+    left: 10,
   },
   dropdown: {
-    position: "absolute",
-    top: 70,
-    right: 20,
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    position: 'absolute',
+    backgroundColor: Colors.green,
+    top: 39,
+    left: 10,
+    padding: 7,
+    paddingTop: 30,
+    borderRadius: Values.borderRadius,
+    zIndex: 2,
   },
   dropdownButton: {
     marginVertical: 5,

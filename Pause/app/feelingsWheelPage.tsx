@@ -1,27 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
-import { useRouter } from 'expo-router'; // Import useRouter for navigation
-import wheelImage from '../assets/images/feelingsWheel.jpg';
-import Timer from '../components/Timer'; // Import Timer Component
+import { useRouter } from 'expo-router';
+import wheelImage from '../assets/images/feelingsWheel.png';
+import Timer, { useTimerContext } from "../components/Timer"; 
 import ContinueButton from '../components/ContinueButton';
+import { magicSauceAlg } from '../util/magicSauceAlg';
+
+// constants
+import Colors from '@/constants/Colors';
+import values from '@/constants/Values';
 
 const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [selectionTime, setSelectionTime] = useState<number | null>(null);
+  const [calculatedTime, setCalculatedTime] = useState<number | null>(null);
+  const { setTimerDuration,isVariableTimer,timerDuration, } = useTimerContext();
 
-  const router = useRouter(); // Hook for navigation
+  const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      setStartTime(null);
+      setSelectionTime(null);
+      setCalculatedTime(null);
+    }, [])
+  );
 
   const resetSelection = () => {
     setSelectedEmotion(null);
     setSelectedSubFeeling(null);
     setFinalFeeling(null);
+    setSelectionTime(null);
+    setCalculatedTime(null);
   };
 
+  const handleEmotionSelect = (emotion: string) => {
+    if (!startTime) {
+      const now = Date.now();
+      setStartTime(now); // Start the timer on the first selection
+      console.log(`Timer started at: ${now}`);
+    }
+    setSelectedEmotion(emotion); // Set the selected emotion
+  };
+
+  const handleFinalFeelingSelect = (feeling: string) => {
+    setFinalFeeling(feeling); // Set the final feeling
+  
+    if (startTime) {
+      const now = Date.now();
+      const timeTaken = (now - startTime) / 1000; // Calculate the elapsed time in seconds
+      setSelectionTime(timeTaken); // Save the elapsed time
+      console.log(`Timer stopped at: ${now}`);
+      console.log(`Time taken to select feeling: ${timeTaken} seconds`);
+  
+      if (selectedEmotion) {
+        const calculatedTime = magicSauceAlg(selectedEmotion, timeTaken); // Calculate the dynamic timer duration
+        setCalculatedTime(calculatedTime); // Save the calculated time
+  
+        if (isVariableTimer) {
+          // Update the timer duration only if variable timer is enabled
+          setTimerDuration(calculatedTime);
+          console.log(`Variable Timer ON: Timer updated to ${calculatedTime} seconds`);
+        } else {
+          console.log(`Variable Timer OFF: Timer remains at ${timerDuration} seconds`);
+        }
+      }
+    }
+  };
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/mindfulnessPage'); // Navigate to the Mindfulness Page
+      console.log(`Time taken to select first emotion: ${selectionTime} seconds`);
+      console.log(`Adjusted time (magicSauceAlg): ${calculatedTime} seconds`);
+      router.push('/mindfulnessPage');
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -86,130 +141,192 @@ const FeelingsWheelPage: React.FC = () => {
   };
 
  return (
-  <View style={styles.container}>
-    <Timer initialTime={20} /> {/* Add Timer at the top */}
-    <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
-    <View style={styles.instructionContainer}>
-      {!finalFeeling ? (
-        selectedEmotion ? (
-          selectedSubFeeling ? (
-            <>
-              <Text style={styles.instruction}>
-                The last two emotions come from the outside of the wheel.
-              </Text>
-              <Text style={styles.instruction}>
-                Click on the emotion that best describes the feeling you previously selected: "{selectedSubFeeling}".
-              </Text>
-            </>
-          ) : (
-            <>
-              <Text style={styles.instruction}>
-                The following list of emotions come from the middle of the wheel.
-              </Text>
-              <Text style={styles.instruction}>
-                 Click on the emotion that best describes the feeling you previously selected: "{selectedEmotion}".
-              </Text>
-              
-            </>
-          )
-        ) : (
-          <>
-            <Text style={styles.instruction}>
-              The following list of emotions come from the center of the wheel pictured above.
-            </Text>
-            <Text style={styles.instruction}>
-              Please click on the emotion in the list that best describes how you are currently feeling:
-            </Text>
-          </>
-        )
-      ) : (
-        <>
-          <Text style={styles.instruction}>
-            After completing the feelings wheel activity, it seems that you may be feeling:
-          </Text>
-          <Text style={[styles.instruction, styles.boldText]}>{finalFeeling}.</Text>
-          <Text style={styles.instruction}>
-            Identifying your feelings is an important step in regulating your emotions. Well done!
-          </Text>
-          <Text style={styles.instruction}>
-            Press the reset button if you'd like to go through the feelings wheel again or click continue to progress through the application.
-          </Text>
-          
-        </>
-      )}
-    </View>
-    <View style={styles.buttonsContainer}>
-      {!selectedEmotion &&
-        Object.keys(emotions).map((emotion) => (
-          <Pressable
-            key={emotion}
-            style={styles.button}
-            onPress={() => setSelectedEmotion(emotion)}
-          >
-            <Text style={styles.buttonText}>{emotion}</Text>
-          </Pressable>
-        ))}
-      {selectedEmotion && !selectedSubFeeling &&
-        Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
-          (subFeeling) => (
-            <Pressable
-              key={subFeeling}
-              style={styles.button}
-              onPress={() => setSelectedSubFeeling(subFeeling)}
-            >
-              <Text style={styles.buttonText}>{subFeeling}</Text>
-            </Pressable>
-          )
-        )}
-      {selectedSubFeeling && !finalFeeling &&
-        emotions[selectedEmotion as keyof typeof emotions][
-          selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
-        ].map((deeperFeeling) => (
-          <Pressable
-            key={deeperFeeling}
-            style={styles.button}
-            onPress={() => setFinalFeeling(deeperFeeling)}
-          >
-            <Text style={styles.buttonText}>{deeperFeeling}</Text>
-          </Pressable>
-        ))}
-      {finalFeeling && (
-        <Pressable style={styles.button} onPress={resetSelection}>
-          <Text style={styles.buttonText}>Reset</Text>
-        </Pressable>
-      )}
-    </View>
-    <View style={styles.continueButtonContainer}>
-      <ContinueButton onPress={handleContinue} />
+  <View style={styles.masterContainer}>
+    <View style={styles.container}>
+
+      {/* Main Content */}
+        <View style={styles.columnContainer}>
+          <View style={[styles.columnSubContainer, { flex: 4 }]}>
+            <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
+          </View>
+          <View style={[styles.columnSubContainer, {flex:3}]}>
+              <View style={styles.instructionContainer}>
+                {!finalFeeling ? (
+                  selectedEmotion ? (
+                    selectedSubFeeling ? (
+                      <>
+                        <Text style={styles.instructionHeader}>
+                          3: Specific Emotion
+                        </Text>
+                        <Text style={styles.instruction}>
+                          Last, choose a specific emotion from the outside of the wheel.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <Text style={styles.instructionHeader}>
+                          2: Narrow Emotion Category
+                        </Text>
+                          <Text style={styles.instruction}>
+                            Select a more specific category of emotion from the middle of the wheel.
+                          </Text>
+                        
+                      </>
+                    )
+                  ) : (
+                    <>
+                      <Text style={styles.instructionHeader}>
+                        Stage 1: Basic Emotion Category
+                      </Text>
+                      <Text style={styles.instruction}>
+                        Select a category of emotion from the center of the wheel.
+                      </Text>
+                    </>
+                  )
+                ) : (
+                  <>
+                    <Text style={styles.instruction}>
+                      You've identified your current emotion as:
+                    </Text>
+                    <Text style={[styles.instruction, styles.boldText, {fontSize: 60, marginBottom: 50}]}>{finalFeeling}</Text>
+                    <Text style={styles.instruction}>
+                      Identifying your feelings is an important step in regulating your emotions. Well done!
+                    </Text>
+                    
+                  </>
+                )}
+              </View>
+              <View style={styles.buttonsContainer}>
+                {!selectedEmotion &&
+                  Object.keys(emotions).map((emotion) => (
+                    <Pressable
+                      key={emotion}
+                      style={styles.button}
+                      onPress={() => handleEmotionSelect(emotion)}
+                    >
+                      <Text style={styles.buttonText}>{emotion}</Text>
+                    </Pressable>
+                  ))}
+                {selectedEmotion && !selectedSubFeeling &&
+                  Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
+                    (subFeeling) => (
+                      <Pressable
+                        key={subFeeling}
+                        style={styles.button}
+                        onPress={() => setSelectedSubFeeling(subFeeling)}
+                      >
+                        <Text style={styles.buttonText}>{subFeeling}</Text>
+                      </Pressable>
+                    )
+                  )}
+                {selectedSubFeeling && !finalFeeling &&
+                  emotions[selectedEmotion as keyof typeof emotions][
+                    selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
+                  ].map((deeperFeeling) => (
+                    <Pressable
+                      key={deeperFeeling}
+                      style={styles.button}
+                      onPress={() => handleFinalFeelingSelect(deeperFeeling)}
+                    >
+                      <Text style={styles.buttonText}>{deeperFeeling}</Text>
+                    </Pressable>
+                  ))}
+                {finalFeeling && (
+                  <View style={{alignContent:'center', }}>
+                    <Pressable style={[styles.resetButton, {alignSelf:'center'}]} onPress={resetSelection}>
+                      <Text style={styles.buttonText}>Change selection</Text>
+                    </Pressable>
+                    <Pressable style={[styles.resetButton, {alignSelf:'center'}]} onPress={handleContinue}>
+                      <Text style={[styles.buttonText, {fontWeight: 500}]}>Continue</Text>
+                    </Pressable>
+                  </View>
+                )}
+              </View>
+          </View>
+        </View>
     </View>
   </View>
 );
 
 };
-
 const styles = StyleSheet.create({
+  masterContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    backgroundColor: Colors.blue,
+    paddingVertical: 20
+  },
+  menuButton: {
+    position: "absolute",
+    top: 0,
+    left: 5,
+    zIndex: 10,
+  },
+  dropdown: {
+    position: "absolute",
+    top: 60,
+    left: 5,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 8,
+    zIndex: 0,
+  },
+  dropdownButton: {
+    marginVertical: 5,
+   
+  },
+  
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: Colors.blue,
+    marginHorizontal: 20
+  },
+  columnContainer: {
+    flex: 9,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: Colors.blue
+  },
+  columnSubContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingTop: 20,
+    backgroundColor: Colors.blue
+  },
+  rowContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.blue
   },
   wheelImage: {
-    width: '90%',
-    height: '65%',
-    marginBottom: 20,
+    flex: 1,
+    aspectRatio: 1.2
   },
   instructionContainer: {
     alignItems: 'center',
     paddingHorizontal: 10,
   },
+  instructionHeader: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 20,
+    fontWeight: 600,
+    letterSpacing: 0.5,
+    lineHeight: 22,
+  },
   instruction: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
     marginBottom: 10,
     marginTop: 20,
     lineHeight: 22,
+    marginHorizontal: 100,
   },
   boldText: {
     fontWeight: 'bold',
@@ -224,20 +341,30 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   button: {
-    backgroundColor: '#4f7bbd',
+    backgroundColor: Colors.green,
+    borderRadius: values.borderRadius,
     padding: 15,
-    margin: 8,
-    borderRadius: 10,
+    margin: 10,
     minWidth: 120,
     alignItems: 'center',
   },
+  resetButton: {
+    backgroundColor: Colors.green,
+    borderRadius: values.borderRadius,
+    padding: 15,
+    margin: 10,
+    minWidth: 200,
+    maxWidth: 400,
+    alignItems: 'center',
+  },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black',
+    fontWeight: '400',
     fontSize: 16,
     textAlign: 'center',
   },
   continueButtonContainer: {
+    flex: 1,
     position: 'absolute',
     bottom: 20,
     alignSelf: 'center',

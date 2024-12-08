@@ -8,22 +8,42 @@
         - Continue button is used to navigate to the next screen.
 */
 
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
-import TextBox from "../components/TextBox"; // Single import for TextBox
+import React, { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { useRouter } from "expo-router";
+import TextBox from "../components/TextBox";
 import ContinueButton from "../components/ContinueButton";
-import Timer from "@/components/Timer";
+import Timer, { useTimerContext } from "../components/Timer";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const Grounding: React.FC = () => {
-  const router = useRouter(); // Hook for navigation
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setIsTimerVisible, setTimerEnded])
+  );
 
   const groundingQuestions = [
-    "What is one thing that you can see in the space around you?",
-    "What four things could you touch in the space around you?",
-    "Can you hear anything right now? Name one.",
-    "Can you smell anything right now? Name that smell.",
-    "Can you taste anything? What is the flavor?",
+    "What is one thing that you can see in the space around you? Describe it.",
+    "Choose a nearby object. What would its texture feel like against your skin?",
+    "What can you hear happening around you?"
   ];
 
   // State to hold user responses for each question
@@ -41,6 +61,7 @@ const Grounding: React.FC = () => {
   // Handle Continue button press
   const handleContinue = () => {
     console.log("User Responses:", responses); // Log all responses
+    console.log(`Timer duration was: ${timerDuration}s`); // Log timer duration for debugging
     router.push("/gratitude"); // Navigate to the Gratitude page
   };
 
@@ -49,18 +70,23 @@ const Grounding: React.FC = () => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <Timer initialTime={20} />
-      <Text style={styles.header}>Grounding Exercise</Text>
+      <Timer key={timerKey} />
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Grounding Exercise</Text>
+      </View>
 
       {/* Scrollable container for questions */}
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      style={styles.scrollView} 
+      contentContainerStyle={styles.scrollContent}>
         {groundingQuestions.map((question, index) => (
           <View key={index} style={styles.questionContainer}>
             <Text style={styles.question}>{question}</Text>
             <TextBox
               boxHeight={20} // Adjusted height
-              boxWidth={500} // Adjusted width
-              color="#f8f9fa" // Light background color
+              boxWidth={600} // Adjusted width
+              color={Colors.green}
               value={responses[index]} // Bind value to the corresponding response
               onChangeText={(text) => handleResponseChange(text, index)} // Update response
             />
@@ -68,9 +94,9 @@ const Grounding: React.FC = () => {
         ))}
       </ScrollView>
 
-      {/* Fixed Continue Button */}
+      {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} />
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -79,27 +105,37 @@ const Grounding: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.blue,
+  },
+  headerContainer: {
+    fontSize: 40,
+    borderRadius:Values.borderRadius, 
+    borderColor:Colors.green, 
+    borderWidth:0, 
+    backgroundColor: Colors.green,
+    padding:20,
+    width: 2400,
+    marginTop: -5,
+    textAlign: "center",
+    alignSelf: 'center',
   },
   header: {
-    fontSize: 50,
-    fontWeight: "bold",
-    marginTop: 40,
-    marginBottom: 20,
+    fontSize: 40,
+    fontWeight: 600,
     textAlign: "center",
+    alignSelf: 'center',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 100, // To avoid overlap with the fixed button
+    paddingBottom: 40, // To avoid overlap with the fixed button
     alignItems: "center",
     paddingHorizontal: 20,
   },
   questionContainer: {
-    marginBottom: 50,
-    marginTop: 30,
-    width: "100%",
+    marginBottom: 20,
+    marginTop: 20,
     alignItems: "center",
   },
   question: {
@@ -109,10 +145,12 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   },
   continueButtonContainer: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
-    alignItems: "center",
+    backgroundColor: Colors.blue,
+    marginTop: 0,
+    marginBottom: 10,
+    paddingTop: 60,
+    paddingBottom: 20,
+    alignSelf: "center",
   },
 });
 

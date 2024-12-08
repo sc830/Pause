@@ -7,7 +7,7 @@
   Functions:  allow access to standard values by name
 
   Usage: add import statement in any other file and reference colors by name
-    import colors from '@/constants/Values'
+    import values from '@/constants/Values'
     style={{ borderRadius: values.borderRadius }}
 
   References:
@@ -25,7 +25,7 @@ interface Values {
 
 // Define and export the values object with the correct type
 const values: Values = {
-  borderRadius: 15,
+  borderRadius: 20,
   componentWidth: 0.95,
   confirmButtonHeight: .04,
   titleBarHeight: .1,

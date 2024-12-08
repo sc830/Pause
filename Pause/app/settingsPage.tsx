@@ -9,54 +9,69 @@
 
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch, TextInput } from "react-native";
-import MenuButton from "@/components/MenuButton";
-import JournalButton from "@/components/JournalButton";
-import MonthlyProgressButton from "@/components/MonthlyProgressButton";
 import StyledButton from "@/components/StyledButton";
 import { useRouter } from "expo-router";
 import { userSignOut } from "@/constants/firebase";
-import { useTimerContext } from "@/components/Timer"; // Import TimerContext hook
+import { useTimerContext } from "@/components/Timer";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
-const settingsPage = () => {
-  const router = useRouter(); // Initialize router for navigation
+const SettingsPage = () => {
+  const router = useRouter();
   const {
     isTimerVisible,
     setIsTimerVisible,
     timerDuration,
     setTimerDuration,
-  } = useTimerContext(); // Access timer context
+    isVariableTimer,
+    setIsVariableTimer,
+  } = useTimerContext();
 
-  const [isVariableTimer, setIsVariableTimer] = useState(false);
-  const [inputDuration, setInputDuration] = useState(timerDuration.toString()); // Sync input with the context
+  const [inputDuration, setInputDuration] = useState(
+    timerDuration !== null ? timerDuration.toString() : "15" // Provide fallback for null
+  );
 
   const toggleShowTimer = () => {
     setIsTimerVisible((prev) => !prev);
   };
 
-  const toggleVariableTimer = () => setIsVariableTimer((prev) => !prev);
+  const toggleVariableTimer = () => {
+    setIsVariableTimer((prev) => !prev);
+
+    if (!isVariableTimer) {
+      const manualDuration = parseInt(inputDuration, 10);
+      if (isNaN(manualDuration) || manualDuration < 15) {
+        alert("Timer duration must be at least 15 seconds.");
+        setInputDuration("15");
+        setTimerDuration(15);
+      } else {
+        setTimerDuration(manualDuration);
+      }
+    }
+  };
 
   const handleTimerDurationChange = () => {
     const duration = parseInt(inputDuration, 10);
-    if (isNaN(duration) || duration < 20) {
-      alert("Timer duration must be at least 20 seconds.");
-    } else {
+    if (!isNaN(duration) && duration >= 15) {
       setTimerDuration(duration);
+    } else {
+      alert("Timer duration must be at least 15 seconds.");
+      setInputDuration(timerDuration?.toString() || "15");
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Settings</Text>
-      <MenuButton style={styles.menuButton} onPress={() => {}} />
 
       {/* Monthly Notifications */}
       <View style={styles.toggleRow}>
-        <Text style={styles.label}>Monthly Notifications</Text>
+        <Text style={[styles.label, {opacity:0.5}]}>Monthly Notifications</Text>
         <Switch
           value={false}
           onValueChange={() => {}}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={"#f5dd4b"}
+          trackColor={{ false: "#6767", true: "#81b0ff" }}
+          thumbColor={"#9A9A9A"}
         />
       </View>
 
@@ -66,8 +81,8 @@ const settingsPage = () => {
         <Switch
           value={isTimerVisible}
           onValueChange={toggleShowTimer}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isTimerVisible ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: Colors.yellow, true: Colors.blue }}
+          thumbColor={Colors.blue}
         />
       </View>
 
@@ -77,13 +92,13 @@ const settingsPage = () => {
         <Switch
           value={isVariableTimer}
           onValueChange={toggleVariableTimer}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isVariableTimer ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: Colors.yellow, true: Colors.blue }}
+          thumbColor={Colors.blue}
         />
       </View>
 
       {/* Timer Duration Input */}
-      {isVariableTimer && (
+      {!isVariableTimer && (
         <View style={styles.durationContainer}>
           <Text style={styles.label}>Timer Duration (in seconds)</Text>
           <TextInput
@@ -92,15 +107,18 @@ const settingsPage = () => {
             onChangeText={setInputDuration}
             placeholder="Enter duration"
             keyboardType="numeric"
-            onBlur={handleTimerDurationChange} // Apply the change on blur
+            onBlur={handleTimerDurationChange}
           />
         </View>
       )}
 
+      {/* Log Out Button */}
+      {/* Log Out Button */}
       <StyledButton
         text="Log Out"
         buttonHeight={80}
         buttonWidth={300}
+        color={Colors.blue}
         onPress={async () => {
           await userSignOut();
           router.push("/");
@@ -115,7 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.green,
   },
   headerText: {
     fontSize: 40,
@@ -133,22 +151,21 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   durationContainer: {
-    marginTop: 20,
+    marginTop: 0,
+    marginBottom: 20,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: Colors.blue,
     padding: 10,
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
     fontSize: 18,
     borderRadius: 5,
-    width: 200,
-  },
-  menuButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
+    width: 100,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
-export default settingsPage;
+export default SettingsPage;
