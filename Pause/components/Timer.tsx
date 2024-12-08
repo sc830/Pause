@@ -10,17 +10,21 @@ interface TimerProps {
 interface TimerContextProps {
   isTimerVisible: boolean;
   setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  timerDuration: number;
-  setTimerDuration: React.Dispatch<React.SetStateAction<number>>;
-  timerEnded: boolean; // Track if the timer has ended
+  timerDuration: number | null;
+  setTimerDuration: React.Dispatch<React.SetStateAction<number | null>>;
+  timerEnded: boolean;
+  setTimerEnded: React.Dispatch<React.SetStateAction<boolean>>;
+  isVariableTimer: boolean;
+  setIsVariableTimer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isTimerVisible, setIsTimerVisible] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(15); // Default timer duration
-  const [timerEnded, setTimerEnded] = useState(false); // New state for timer end
+  const [isTimerVisible, setIsTimerVisible] = useState(true);
+  const [timerDuration, setTimerDuration] = useState<number | null>(null); // Initialize without a default
+  const [timerEnded, setTimerEnded] = useState(false);
+  const [isVariableTimer, setIsVariableTimer] = useState(false); // Toggle between manual and variable
 
   return (
     <TimerContext.Provider
@@ -31,6 +35,8 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setTimerDuration,
         timerEnded,
         setTimerEnded,
+        isVariableTimer,
+        setIsVariableTimer,
       }}
     >
       {children}
@@ -49,13 +55,17 @@ export const useTimerContext = () => {
 // Timer Component
 const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
   const { isTimerVisible, timerDuration, setTimerEnded } = useTimerContext();
-  const [timeInSeconds, setTime] = useState(timerDuration);
+  const [timeInSeconds, setTime] = useState(timerDuration || 0);
 
+  // Sync local state with global duration when timerDuration changes
   useEffect(() => {
-    setTime(timerDuration); // Reset timer whenever duration changes
-    setTimerEnded(false); // Reset `timerEnded` when timer restarts
+    if (timerDuration !== null) {
+      setTime(timerDuration);
+      setTimerEnded(false); // Reset timerEnded when timer resets
+    }
   }, [timerDuration, setTimerEnded]);
 
+  // Timer countdown logic
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
     if (timeInSeconds > 0) {
@@ -63,14 +73,12 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
         setTime((prev) => prev - 1);
       }, 1000);
     } else if (timeInSeconds === 0) {
-      setTimerEnded(true); // Mark timer as ended
-      if (onTimerEnd) onTimerEnd();
+      setTimerEnded(true); // Mark the timer as ended
+      if (onTimerEnd) onTimerEnd(); // Trigger optional onTimerEnd callback
     }
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      if (timer) clearInterval(timer);
     };
   }, [isTimerVisible, timeInSeconds, setTimerEnded, onTimerEnd]);
 

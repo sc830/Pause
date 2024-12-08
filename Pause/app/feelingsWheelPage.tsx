@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
-import { useRouter } from 'expo-router'; // Import useRouter for navigation
+import { useRouter } from 'expo-router';
 import wheelImage from '../assets/images/feelingsWheel.png';
 import Timer, { useTimerContext } from "../components/Timer"; 
 import ContinueButton from '../components/ContinueButton';
+import { magicSauceAlg } from '../util/magicSauceAlg';
 
 // constants
 import Colors from '@/constants/Colors';
@@ -13,23 +15,68 @@ const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [selectionTime, setSelectionTime] = useState<number | null>(null);
+  const [calculatedTime, setCalculatedTime] = useState<number | null>(null);
+  const { setTimerDuration,isVariableTimer,timerDuration, } = useTimerContext();
 
-  const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext();
+  const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      setStartTime(null);
+      setSelectionTime(null);
+      setCalculatedTime(null);
+    }, [])
+  );
 
   const resetSelection = () => {
     setSelectedEmotion(null);
     setSelectedSubFeeling(null);
     setFinalFeeling(null);
+    setSelectionTime(null);
+    setCalculatedTime(null);
   };
 
+  const handleEmotionSelect = (emotion: string) => {
+    if (!startTime) {
+      const now = Date.now();
+      setStartTime(now); // Start the timer on the first selection
+      console.log(`Timer started at: ${now}`);
+    }
+    setSelectedEmotion(emotion); // Set the selected emotion
+  };
 
-
+  const handleFinalFeelingSelect = (feeling: string) => {
+    setFinalFeeling(feeling); // Set the final feeling
+  
+    if (startTime) {
+      const now = Date.now();
+      const timeTaken = (now - startTime) / 1000; // Calculate the elapsed time in seconds
+      setSelectionTime(timeTaken); // Save the elapsed time
+      console.log(`Timer stopped at: ${now}`);
+      console.log(`Time taken to select feeling: ${timeTaken} seconds`);
+  
+      if (selectedEmotion) {
+        const calculatedTime = magicSauceAlg(selectedEmotion, timeTaken); // Calculate the dynamic timer duration
+        setCalculatedTime(calculatedTime); // Save the calculated time
+  
+        if (isVariableTimer) {
+          // Update the timer duration only if variable timer is enabled
+          setTimerDuration(calculatedTime);
+          console.log(`Variable Timer ON: Timer updated to ${calculatedTime} seconds`);
+        } else {
+          console.log(`Variable Timer OFF: Timer remains at ${timerDuration} seconds`);
+        }
+      }
+    }
+  };
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/mindfulnessPage'); // Navigate to the Mindfulness Page
+      console.log(`Time taken to select first emotion: ${selectionTime} seconds`);
+      console.log(`Adjusted time (magicSauceAlg): ${calculatedTime} seconds`);
+      router.push('/mindfulnessPage');
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -99,7 +146,7 @@ const FeelingsWheelPage: React.FC = () => {
 
       {/* Main Content */}
         <View style={styles.columnContainer}>
-          <View style={[styles.columnSubContainer, {flex:4}]}>
+          <View style={[styles.columnSubContainer, { flex: 4 }]}>
             <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
           </View>
           <View style={[styles.columnSubContainer, {flex:3}]}>
@@ -202,7 +249,6 @@ const FeelingsWheelPage: React.FC = () => {
 );
 
 };
-
 const styles = StyleSheet.create({
   masterContainer: {
     flex: 1,
@@ -235,6 +281,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
    
   },
+  
   container: {
     flex: 1,
     flexDirection: 'column',

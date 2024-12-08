@@ -7,9 +7,10 @@
         Continue button navigates to the next screen.
 */
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useRouter } from "expo-router";
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 import AddButton from "@/components/AddButton";
@@ -19,8 +20,19 @@ import Values from '@/constants/Values';
 
 export function Gratitude() {
   const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext();
   const [textInputs, setTextInputs] = useState<string[]>(["", "", ""]);
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setIsTimerVisible, setTimerEnded])
+  );
 
   const handleAddTextBox = () => {
     setTextInputs((prev) => [...prev, ""]);
@@ -34,12 +46,13 @@ export function Gratitude() {
 
   const handleContinue = () => {
     console.log("Gratitude List:", textInputs);
+    console.log(`Timer duration was: ${timerDuration}s`); // Log timer duration for debugging
     router.push("/journalPage"); // Navigate to the Journal Page
   };
 
   return (
     <View style={styles.container}>
-      <Timer />
+      <Timer key={timerKey} />
       <Text style={styles.header}>
         What are you grateful for?
       </Text>

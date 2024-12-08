@@ -12,7 +12,7 @@ import { View, Text, StyleSheet, Switch, TextInput } from "react-native";
 import StyledButton from "@/components/StyledButton";
 import { useRouter } from "expo-router";
 import { userSignOut } from "@/constants/firebase";
-import { useTimerContext } from "@/components/Timer"; // Import TimerContext hook
+import { useTimerContext } from "@/components/Timer";
 import Colors from '@/constants/Colors';
 import Values from '@/constants/Values';
 
@@ -23,23 +23,40 @@ const SettingsPage = () => {
     setIsTimerVisible,
     timerDuration,
     setTimerDuration,
-  } = useTimerContext(); // Access timer context
+    isVariableTimer,
+    setIsVariableTimer,
+  } = useTimerContext();
 
-  const [isVariableTimer, setIsVariableTimer] = useState(false);
-  const [inputDuration, setInputDuration] = useState(timerDuration.toString()); // Sync input with the context
+  const [inputDuration, setInputDuration] = useState(
+    timerDuration !== null ? timerDuration.toString() : "0" // Provide fallback for null
+  );
 
   const toggleShowTimer = () => {
     setIsTimerVisible((prev) => !prev);
   };
 
-  const toggleVariableTimer = () => setIsVariableTimer((prev) => !prev);
+  const toggleVariableTimer = () => {
+    setIsVariableTimer((prev) => !prev);
+
+    if (!isVariableTimer) {
+      const manualDuration = parseInt(inputDuration, 10);
+      if (isNaN(manualDuration) || manualDuration < 20) {
+        alert("Timer duration must be at least 20 seconds.");
+        setInputDuration("20");
+        setTimerDuration(20);
+      } else {
+        setTimerDuration(manualDuration);
+      }
+    }
+  };
 
   const handleTimerDurationChange = () => {
     const duration = parseInt(inputDuration, 10);
-    if (isNaN(duration) || duration < 20) {
-      alert("Timer duration must be at least 20 seconds.");
-    } else {
+    if (!isNaN(duration) && duration >= 20) {
       setTimerDuration(duration);
+    } else {
+      alert("Timer duration must be at least 20 seconds.");
+      setInputDuration(timerDuration?.toString() || "20");
     }
   };
 
@@ -90,11 +107,12 @@ const SettingsPage = () => {
             onChangeText={setInputDuration}
             placeholder="Enter duration"
             keyboardType="numeric"
-            onBlur={handleTimerDurationChange} // Apply the change on blur
+            onBlur={handleTimerDurationChange}
           />
         </View>
       )}
 
+      {/* Log Out Button */}
       {/* Log Out Button */}
       <StyledButton
         text="Log Out"

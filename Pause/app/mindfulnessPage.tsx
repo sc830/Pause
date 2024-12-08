@@ -8,26 +8,39 @@
         Continue button is used to navigate to the next screen
 */
 
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import ContinueButton from "../components/ContinueButton";
 import Timer, { useTimerContext } from "@/components/Timer"; // Import Timer component and context
 import Colors from '@/constants/Colors';
 import Values from '@/constants/Values';
 
 const Mindfulness: React.FC = () => {
-  const router = useRouter(); // Hook for navigation
-  const { timerEnded } = useTimerContext(); // Access timerEnded from TimerContext
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
+
+  const [timerKey, setTimerKey] = useState(0);
+
+  // Reset timer state when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setTimerKey((prevKey) => prevKey + 1);
+      setIsTimerVisible(true); // Ensure the timer is visible
+      setTimerEnded(false); // Reset the timerEnded state
+    }, [setIsTimerVisible, setTimerEnded])
+  );
 
   const handleContinue = () => {
-    console.log("User has completed mindfulness exercises."); // Log user action
-    router.push("/grounding"); // Navigate to the grounding page
+    console.log("User has completed mindfulness exercises.");
+    console.log(`Timer duration was: ${timerDuration}s`); // Log the timer duration for debugging
+    router.push("/grounding"); // Navigate to the next page
   };
 
   return (
     <View style={[styles.container, {backgroundColor:Colors.blue}]}>
-      <Timer /> {/* Add Timer at the top */}
+      <Timer key={timerKey}/> {/* Add Timer at the top */}
       <View style={styles.headerContainer}>
           <Text style={styles.header}>Mindfulness Exercises</Text>
           <Text style={styles.subHeader}>
@@ -77,7 +90,6 @@ const Mindfulness: React.FC = () => {
           </Text>
       </ScrollView>
 
-      {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
         <ContinueButton onPress={handleContinue} disabled={!timerEnded} /> {/* Disable button until timer ends */}
       </View>
@@ -135,8 +147,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     lineHeight: 24,
-    paddingHorizontal: 10,
-    marginBottom: 10, // Space between sentences
   },
   continueButtonContainer: {
     backgroundColor: Colors.blue,
