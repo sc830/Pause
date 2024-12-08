@@ -28,7 +28,7 @@ const SettingsPage = () => {
   } = useTimerContext();
 
   const [inputDuration, setInputDuration] = useState(
-    timerDuration !== null ? timerDuration.toString() : "0" // Provide fallback for null
+    timerDuration !== null ? timerDuration.toString() : "15" // Provide fallback for null
   );
 
   const toggleShowTimer = () => {
@@ -40,10 +40,10 @@ const SettingsPage = () => {
 
     if (!isVariableTimer) {
       const manualDuration = parseInt(inputDuration, 10);
-      if (isNaN(manualDuration) || manualDuration < 20) {
-        alert("Timer duration must be at least 20 seconds.");
-        setInputDuration("20");
-        setTimerDuration(20);
+      if (isNaN(manualDuration) || manualDuration < 15) {
+        alert("Timer duration must be at least 15 seconds.");
+        setInputDuration("15");
+        setTimerDuration(15);
       } else {
         setTimerDuration(manualDuration);
       }
@@ -52,11 +52,11 @@ const SettingsPage = () => {
 
   const handleTimerDurationChange = () => {
     const duration = parseInt(inputDuration, 10);
-    if (!isNaN(duration) && duration >= 20) {
+    if (!isNaN(duration) && duration >= 15) {
       setTimerDuration(duration);
     } else {
-      alert("Timer duration must be at least 20 seconds.");
-      setInputDuration(timerDuration?.toString() || "20");
+      alert("Timer duration must be at least 15 seconds.");
+      setInputDuration(timerDuration?.toString() || "15");
     }
   };
 
@@ -155,16 +155,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: Colors.blue,
     padding: 10,
     marginTop: 5,
     marginBottom: 5,
     fontSize: 18,
     borderRadius: 5,
-    width: 200,
+    width: 100,
     alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

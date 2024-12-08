@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 100, // To avoid overlap with the fixed button
+    paddingBottom: 40, // To avoid overlap with the fixed button
     alignItems: "center",
     paddingHorizontal: 20,
   },

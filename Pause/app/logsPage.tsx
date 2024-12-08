@@ -35,9 +35,6 @@ export default function LogsPage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>
-        Choose A Date to View Past Responses:
-      </Text>
       <MenuButton style={styles.menuButton} onPress={toggleDropdown} />
 
       {/* Dropdown Menu */}
@@ -59,6 +56,10 @@ export default function LogsPage() {
           />
         </View>
       )}
+
+      <Text style={styles.headerText}>
+        Choose A Date to View Past Responses:
+      </Text>
 
       {/* Render Date Buttons */}
       <FlatList
@@ -93,23 +94,19 @@ const styles = StyleSheet.create({
   menuButton: {
     position: "absolute",
     backgroundColor: Colors.green,
-    zIndex: 5,
-    top: 20,
-    left: 20,
+    zIndex: 10,
+    top: 10,
+    left: 10,
   },
   dropdown: {
-    position: "absolute",
-    zIndex: 3,
-    top: 70,
-    left: 20,
+    position: 'absolute',
     backgroundColor: Colors.green,
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    top: 39,
+    left: 10,
+    padding: 7,
+    paddingTop: 30,
+    borderRadius: Values.borderRadius,
+    zIndex: 2,
   },
   dropdownButton: {
     marginVertical: 5,

@@ -22,7 +22,7 @@ const JournalButton: React.FC<JournalButtonProps> = ({
     >
       <Image
         source={journalIcon} // Use the correct icon
-        style={{ width: 40, height: 40 }}
+        style={{ width: 38, height: 38 }}
         resizeMode="contain"
         accessible
         accessibilityLabel={altText}

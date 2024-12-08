@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
   goButton: {
     padding: 20,
     borderRadius: Values.borderRadius,
-    elevation: 3,
     margin: 10
   },
   menuButton: {
@@ -231,15 +230,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: Colors.green,
-    padding: 10,
-    marginTop: -15,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    zIndex: 5,
+    padding: 5,
+    paddingTop: 30,
+    marginTop: -35,
+    borderRadius: Values.borderRadius,
+    zIndex: 2,
   },
   dropdownButton: {
     marginVertical: 5,

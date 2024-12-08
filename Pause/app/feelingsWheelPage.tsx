@@ -270,12 +270,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-     zIndex: 10,
+    zIndex: 0,
   },
   dropdownButton: {
     marginVertical: 5,
