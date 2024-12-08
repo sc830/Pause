@@ -79,7 +79,7 @@ const SettingsPage = () => {
       </View>
 
       {/* Timer Duration Input */}
-      {isVariableTimer && (
+      {!isVariableTimer && (
         <View style={styles.durationContainer}>
           <Text style={styles.label}>Timer Duration (in seconds)</Text>
           <TextInput

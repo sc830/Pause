@@ -14,17 +14,17 @@ import { useRouter } from "expo-router"; // Import useRouter for navigation
 import TextBox from "../components/TextBox"; // Single import for TextBox
 import ContinueButton from "../components/ContinueButton";
 import Timer, { useTimerContext } from "../components/Timer";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const Grounding: React.FC = () => {
   const router = useRouter(); // Hook for navigation
   const { timerEnded } = useTimerContext();
 
   const groundingQuestions = [
-    "What is one thing that you can see in the space around you?",
-    "What four things could you touch in the space around you?",
-    "Can you hear anything right now? Name one.",
-    "Can you smell anything right now? Name that smell.",
-    "Can you taste anything? What is the flavor?",
+    "What is one thing that you can see in the space around you? Describe it.",
+    "Choose a nearby object. What would its texture feel like against your skin?",
+    "What can you hear happening around you?"
   ];
 
   // State to hold user responses for each question
@@ -51,17 +51,22 @@ const Grounding: React.FC = () => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Timer />
-      <Text style={styles.header}>Grounding Exercise</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Grounding Exercise</Text>
+      </View>
 
       {/* Scrollable container for questions */}
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      style={styles.scrollView} 
+      contentContainerStyle={styles.scrollContent}>
         {groundingQuestions.map((question, index) => (
           <View key={index} style={styles.questionContainer}>
             <Text style={styles.question}>{question}</Text>
             <TextBox
               boxHeight={20} // Adjusted height
-              boxWidth={500} // Adjusted width
-              color="#f8f9fa" // Light background color
+              boxWidth={600} // Adjusted width
+              color={Colors.green}
               value={responses[index]} // Bind value to the corresponding response
               onChangeText={(text) => handleResponseChange(text, index)} // Update response
             />
@@ -69,9 +74,9 @@ const Grounding: React.FC = () => {
         ))}
       </ScrollView>
 
-      {/* Fixed Continue Button */}
+      {/* Continue Button */}
       <View style={styles.continueButtonContainer}>
-        <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
+        <ContinueButton onPress={handleContinue} disabled={!timerEnded} /> {/* Disable button until timer ends */}
       </View>
     </KeyboardAvoidingView>
   );
@@ -80,14 +85,26 @@ const Grounding: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.blue,
+  },
+  headerContainer: {
+    fontSize: 40,
+    fontWeight: 600,
+    borderRadius:Values.borderRadius, 
+    borderColor:Colors.green, 
+    borderWidth:0, 
+    backgroundColor: Colors.green,
+    padding:20,
+    width: 2400,
+    marginTop: -5,
+    textAlign: "center",
+    alignSelf: 'center',
   },
   header: {
     fontSize: 50,
     fontWeight: "bold",
-    marginTop: 40,
-    marginBottom: 20,
     textAlign: "center",
+    alignSelf: 'center',
   },
   scrollView: {
     flex: 1,
@@ -98,9 +115,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   questionContainer: {
-    marginBottom: 50,
-    marginTop: 30,
-    width: "100%",
+    marginBottom: 20,
+    marginTop: 20,
     alignItems: "center",
   },
   question: {
@@ -110,10 +126,12 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   },
   continueButtonContainer: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
-    alignItems: "center",
+    backgroundColor: Colors.blue,
+    marginTop: 0,
+    marginBottom: 10,
+    paddingTop: 60,
+    paddingBottom: 20,
+    alignSelf: "center",
   },
 });
 

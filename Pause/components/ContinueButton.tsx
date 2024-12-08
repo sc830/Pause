@@ -41,7 +41,7 @@ const ContinueButton: React.FC<ContinueButtonProps> = ({
 }) => {
   const { width, height } = Dimensions.get('window');
   const insets = useSafeAreaInsets();                 // Get safe area insets
-  const buttonHeight = height*.04 + insets.top;        // 10% screen height + safe area top inset
+  const buttonHeight = height*.07 + insets.top;        // 10% screen height + safe area top inset
   const buttonWidth = width*values.componentWidth;                       // 90% width of screen
   const leftPosition = (width*.05)/2;                  // compute left margin
 

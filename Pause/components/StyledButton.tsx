@@ -49,9 +49,8 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
     alignContent: 'center',
-    alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
     borderRadius: values.borderRadius,
