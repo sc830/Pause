@@ -13,6 +13,8 @@ import StyledButton from "@/components/StyledButton";
 import { useRouter } from "expo-router";
 import { userSignOut } from "@/constants/firebase";
 import { useTimerContext } from "@/components/Timer"; // Import TimerContext hook
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const SettingsPage = () => {
   const router = useRouter();
@@ -47,12 +49,12 @@ const SettingsPage = () => {
 
       {/* Monthly Notifications */}
       <View style={styles.toggleRow}>
-        <Text style={styles.label}>Monthly Notifications</Text>
+        <Text style={[styles.label, {opacity:0.5}]}>Monthly Notifications</Text>
         <Switch
           value={false}
           onValueChange={() => {}}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={"#f5dd4b"}
+          trackColor={{ false: "#6767", true: "#81b0ff" }}
+          thumbColor={"#9A9A9A"}
         />
       </View>
 
@@ -62,8 +64,8 @@ const SettingsPage = () => {
         <Switch
           value={isTimerVisible}
           onValueChange={toggleShowTimer}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isTimerVisible ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: Colors.yellow, true: Colors.blue }}
+          thumbColor={Colors.blue}
         />
       </View>
 
@@ -73,8 +75,8 @@ const SettingsPage = () => {
         <Switch
           value={isVariableTimer}
           onValueChange={toggleVariableTimer}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isVariableTimer ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: Colors.yellow, true: Colors.blue }}
+          thumbColor={Colors.blue}
         />
       </View>
 
@@ -98,6 +100,7 @@ const SettingsPage = () => {
         text="Log Out"
         buttonHeight={80}
         buttonWidth={300}
+        color={Colors.blue}
         onPress={async () => {
           await userSignOut();
           router.push("/");
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.green,
   },
   headerText: {
     fontSize: 40,
@@ -130,16 +133,20 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   durationContainer: {
-    marginTop: 20,
+    marginTop: 0,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
     fontSize: 18,
     borderRadius: 5,
     width: 200,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });
 

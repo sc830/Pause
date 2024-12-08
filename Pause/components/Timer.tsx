@@ -19,7 +19,7 @@ const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isTimerVisible, setIsTimerVisible] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(5); // Default timer duration
+  const [timerDuration, setTimerDuration] = useState(15); // Default timer duration
   const [timerEnded, setTimerEnded] = useState(false); // New state for timer end
 
   return (

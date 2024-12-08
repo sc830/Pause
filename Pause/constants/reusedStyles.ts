@@ -22,6 +22,7 @@
 
 import { StyleSheet } from 'react-native'; // Single StyleSheet import
 import colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 const reusedStyles = StyleSheet.create({
   headerTextStyle: {
@@ -54,8 +55,8 @@ const reusedStyles = StyleSheet.create({
     color: colors.black,
   },
   menuButton: {
-    padding: 10,
-    borderRadius: 10,
+    padding: 13,
+    borderRadius: Values.borderRadius,
     backgroundColor: '#f0f0f0',
   },
   dateButton: {

@@ -23,12 +23,12 @@ import { useAuth, AuthProvider } from '@/contexts/AuthContext';
 
 // constants
 import reusedStyles from '@/constants/reusedStyles';
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 // components
 import StyledButton from '@/components/StyledButton';
 import TextBox from '@/components/TextBox';
-
-import '@/constants/global.css';
 
 export default function Login() {
 
@@ -46,16 +46,16 @@ export default function Login() {
 
         return (
           <AuthProvider>
-            <View>
+            <View style={{ backgroundColor: Colors.blue, flex:1 }}>
               <View
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  margin: 60,
+                  margin: 40,
                   padding: 10,
                 }}
               >
-                <Text>Please Log In</Text>
+                <Text style={{ fontSize:40, fontWeight:400 }}>Please Log In</Text>
               </View>
 
                   <View 
@@ -66,6 +66,7 @@ export default function Login() {
                     }}
                   >
                     <TextBox  text= "Email"
+                      color={Colors.green}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, email: text }))}
                     />
                   </View>
@@ -77,12 +78,13 @@ export default function Login() {
                     }}
                   >
                     <TextBox  text= "Password"  
+                      color={Colors.green}
                       secure={true}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, password: text }))}
                     />
                   </View>
 
-                <View>
+                <View style={{ alignItems: 'center' }}>
                   <StyledButton
                       text="Login"
                       buttonHeight={80}
