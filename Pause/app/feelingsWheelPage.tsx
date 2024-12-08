@@ -18,61 +18,59 @@ const FeelingsWheelPage: React.FC = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [selectionTime, setSelectionTime] = useState<number | null>(null);
   const [calculatedTime, setCalculatedTime] = useState<number | null>(null);
+  const { setTimerDuration,isVariableTimer,timerDuration, } = useTimerContext();
 
   const router = useRouter();
-  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration, isVariableTimer } = useTimerContext();
-  const [isTimerStarted, setIsTimerStarted] = useState(false);
-  const [timerKey, setTimerKey] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
-      const now = Date.now();
-      setStartTime(now);
-      setTimerKey((prevKey) => prevKey + 1);
-      setIsTimerVisible(false);
-      setTimerEnded(false);
-      setIsTimerStarted(false);
+      setStartTime(null);
       setSelectionTime(null);
       setCalculatedTime(null);
-    }, [setIsTimerVisible, setTimerEnded])
+    }, [])
   );
-
-  const startTimer = () => {
-    setIsTimerVisible(true);
-    setIsTimerStarted(true);
-    setTimerEnded(false);
-  };
 
   const resetSelection = () => {
     setSelectedEmotion(null);
     setSelectedSubFeeling(null);
     setFinalFeeling(null);
-    setIsTimerStarted(false);
-    setTimerKey((prevKey) => prevKey + 1);
-    setIsTimerVisible(false);
     setSelectionTime(null);
     setCalculatedTime(null);
   };
 
   const handleEmotionSelect = (emotion: string) => {
-    setSelectedEmotion(emotion);
-    if (!isTimerStarted) {
-      startTimer();
-    }
-    if (!selectionTime && startTime) {
+    if (!startTime) {
       const now = Date.now();
-      const timeTaken = (now - startTime) / 1000;
-      setSelectionTime(timeTaken);
+      setStartTime(now); // Start the timer on the first selection
+      console.log(`Timer started at: ${now}`);
+    }
+    setSelectedEmotion(emotion); // Set the selected emotion
+  };
 
-      const calculated = magicSauceAlg(emotion, timeTaken);
-      setCalculatedTime(calculated);
-
-      if (isVariableTimer) {
-        setTimerDuration(calculated); // Update global timer duration if variable timer is enabled
+  const handleFinalFeelingSelect = (feeling: string) => {
+    setFinalFeeling(feeling); // Set the final feeling
+  
+    if (startTime) {
+      const now = Date.now();
+      const timeTaken = (now - startTime) / 1000; // Calculate the elapsed time in seconds
+      setSelectionTime(timeTaken); // Save the elapsed time
+      console.log(`Timer stopped at: ${now}`);
+      console.log(`Time taken to select feeling: ${timeTaken} seconds`);
+  
+      if (selectedEmotion) {
+        const calculatedTime = magicSauceAlg(selectedEmotion, timeTaken); // Calculate the dynamic timer duration
+        setCalculatedTime(calculatedTime); // Save the calculated time
+  
+        if (isVariableTimer) {
+          // Update the timer duration only if variable timer is enabled
+          setTimerDuration(calculatedTime);
+          console.log(`Variable Timer ON: Timer updated to ${calculatedTime} seconds`);
+        } else {
+          console.log(`Variable Timer OFF: Timer remains at ${timerDuration} seconds`);
+        }
       }
     }
   };
-
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
@@ -145,8 +143,6 @@ const FeelingsWheelPage: React.FC = () => {
   return (
     <View style={styles.masterContainer}>
       <View style={styles.container}>
-        {isTimerStarted && <Timer key={timerKey} />}
-
         <View style={styles.columnContainer}>
           <View style={[styles.columnSubContainer, { flex: 4 }]}>
             <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
@@ -226,7 +222,7 @@ const FeelingsWheelPage: React.FC = () => {
                   <Pressable
                     key={deeperFeeling}
                     style={styles.button}
-                    onPress={() => setFinalFeeling(deeperFeeling)}
+                    onPress={() => handleFinalFeelingSelect(deeperFeeling)}
                   >
                     <Text style={styles.buttonText}>{deeperFeeling}</Text>
                   </Pressable>
@@ -250,13 +246,12 @@ const FeelingsWheelPage: React.FC = () => {
           </View>
         </View>
         <View style={styles.rowContainer}>
-          <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
+          <ContinueButton onPress={handleContinue} disabled={!finalFeeling} />
         </View>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   masterContainer: {
     flex: 1,

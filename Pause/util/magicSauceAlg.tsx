@@ -14,8 +14,19 @@ const emotionWeights: EmotionConfig = {
 
 export function magicSauceAlg(selectedEmotion: string, timeTaken: number): number {
   const baseTime = emotionWeights[selectedEmotion] || 1; // Default weight is 1 for undefined emotions
-  const scaledTime = Math.min(Math.max(timeTaken * 0.5, 20), 120); // Scale time between 20s and 120s
+
+  // Scale time more softly, avoiding immediate aggressive clamping
+  let scaledTime = timeTaken * 0.5;
+
+  if (scaledTime < 20) {
+    scaledTime = 20 + (scaledTime / 2); // Adjust low times gently
+  } else if (scaledTime > 120) {
+    scaledTime = 120 - ((scaledTime - 120) / 2); // Adjust high times gently
+  }
+
+  // Final calculated time with emotion weighting
   const calculatedTime = baseTime * scaledTime;
 
-  return Math.round(Math.min(Math.max(calculatedTime, 20), 120)); // Ensure the time is within bounds
+  // Final clamping to ensure safety
+  return Math.round(Math.min(Math.max(calculatedTime, 20), 120));
 }
