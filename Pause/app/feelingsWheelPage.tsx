@@ -1,11 +1,11 @@
-import React, { useCallback,useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
-import { useRouter } from 'expo-router'; // Import useRouter for navigation
+import { useRouter } from 'expo-router';
 import wheelImage from '../assets/images/feelingsWheel.png';
-import Timer, { useTimerContext } from "../components/Timer"; 
+import Timer, { useTimerContext } from '../components/Timer';
 import ContinueButton from '../components/ContinueButton';
-
+import { magicSauceAlg } from '../util/magicSauceAlg';
 
 // constants
 import Colors from '@/constants/Colors';
@@ -15,35 +15,70 @@ const FeelingsWheelPage: React.FC = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
   const [selectedSubFeeling, setSelectedSubFeeling] = useState<string | null>(null);
   const [finalFeeling, setFinalFeeling] = useState<string | null>(null);
- 
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [selectionTime, setSelectionTime] = useState<number | null>(null);
+  const [calculatedTime, setCalculatedTime] = useState<number | null>(null);
 
-  const router = useRouter(); // Hook for navigation
-  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
-
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration, isVariableTimer } = useTimerContext();
+  const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
-  // Reset timer state when screen is focused
+
   useFocusEffect(
     useCallback(() => {
+      const now = Date.now();
+      setStartTime(now);
       setTimerKey((prevKey) => prevKey + 1);
-      setTimerDuration(20); // Reset the global timer duration
-      setIsTimerVisible(true); // Ensure the timer is visible
-      setTimerEnded(false); // Reset the timerEnded state
-    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+      setIsTimerVisible(false);
+      setTimerEnded(false);
+      setIsTimerStarted(false);
+      setSelectionTime(null);
+      setCalculatedTime(null);
+    }, [setIsTimerVisible, setTimerEnded])
   );
+
+  const startTimer = () => {
+    setIsTimerVisible(true);
+    setIsTimerStarted(true);
+    setTimerEnded(false);
+  };
 
   const resetSelection = () => {
     setSelectedEmotion(null);
     setSelectedSubFeeling(null);
     setFinalFeeling(null);
+    setIsTimerStarted(false);
+    setTimerKey((prevKey) => prevKey + 1);
+    setIsTimerVisible(false);
+    setSelectionTime(null);
+    setCalculatedTime(null);
   };
 
-  
+  const handleEmotionSelect = (emotion: string) => {
+    setSelectedEmotion(emotion);
+    if (!isTimerStarted) {
+      startTimer();
+    }
+    if (!selectionTime && startTime) {
+      const now = Date.now();
+      const timeTaken = (now - startTime) / 1000;
+      setSelectionTime(timeTaken);
 
+      const calculated = magicSauceAlg(emotion, timeTaken);
+      setCalculatedTime(calculated);
+
+      if (isVariableTimer) {
+        setTimerDuration(calculated); // Update global timer duration if variable timer is enabled
+      }
+    }
+  };
 
   const handleContinue = () => {
     if (finalFeeling) {
       console.log(`Proceeding with selected feeling: ${finalFeeling}`);
-      router.push('/mindfulnessPage'); // Navigate to the Mindfulness Page
+      console.log(`Time taken to select first emotion: ${selectionTime} seconds`);
+      console.log(`Adjusted time (magicSauceAlg): ${calculatedTime} seconds`);
+      router.push('/mindfulnessPage');
     } else {
       console.log('Please select a feeling before continuing.');
     }
@@ -107,120 +142,119 @@ const FeelingsWheelPage: React.FC = () => {
     },
   };
 
- return (
-  <View style={styles.masterContainer}>
-    <View style={styles.container}>
-      <Timer key={timerKey} />
-       
-      {/* Main Content */}
+  return (
+    <View style={styles.masterContainer}>
+      <View style={styles.container}>
+        {isTimerStarted && <Timer key={timerKey} />}
+
         <View style={styles.columnContainer}>
-          <View style={[styles.columnSubContainer, {flex:4}]}>
+          <View style={[styles.columnSubContainer, { flex: 4 }]}>
             <Image source={wheelImage} style={styles.wheelImage} resizeMode="contain" />
           </View>
-          <View style={[styles.columnSubContainer, {flex:2}]}>
-              <View style={styles.instructionContainer}>
-                {!finalFeeling ? (
-                  selectedEmotion ? (
-                    selectedSubFeeling ? (
-                      <>
-                        <Text style={styles.instructionHeader}>
-                          The last two emotions come from the outside of the wheel.
-                        </Text>
-                        <Text style={styles.instruction}>
-                          Click on the emotion that best describes the feeling you previously selected: "{selectedSubFeeling}".
-                        </Text>
-                      </>
-                    ) : (
-                      <>
-                        <Text style={styles.instructionHeader}>
-                          Stage 2: Narrow Emotion Category
-                        </Text>
-                          <Text style={styles.instruction}>
-                            Select a more specific category of emotion from the middle of the wheel.
-                          </Text>
-                        
-                      </>
-                    )
+          <View style={[styles.columnSubContainer, { flex: 2 }]}>
+            <View style={styles.instructionContainer}>
+              {!finalFeeling ? (
+                selectedEmotion ? (
+                  selectedSubFeeling ? (
+                    <>
+                      <Text style={styles.instructionHeader}>
+                        The last two emotions come from the outside of the wheel.
+                      </Text>
+                      <Text style={styles.instruction}>
+                        Click on the emotion that best describes the feeling you previously selected: "{selectedSubFeeling}".
+                      </Text>
+                    </>
                   ) : (
                     <>
                       <Text style={styles.instructionHeader}>
-                        Stage 1: Basic Emotion Category
+                        Stage 2: Narrow Emotion Category
                       </Text>
                       <Text style={styles.instruction}>
-                        Select a category of emotion from the center of the wheel.
+                        Select a more specific category of emotion from the middle of the wheel.
                       </Text>
                     </>
                   )
                 ) : (
                   <>
-                    <Text style={styles.instruction}>
-                      You've identified your current emotion as:
+                    <Text style={styles.instructionHeader}>
+                      Stage 1: Basic Emotion Category
                     </Text>
-                    <Text style={[styles.instruction, styles.boldText, {fontSize: 60}]}>{finalFeeling}</Text>
                     <Text style={styles.instruction}>
-                      Identifying your feelings is an important step in regulating your emotions. Well done!
+                      Select a category of emotion from the center of the wheel.
                     </Text>
-                    
                   </>
+                )
+              ) : (
+                <>
+                  <Text style={styles.instruction}>
+                    You've identified your current emotion as:
+                  </Text>
+                  <Text style={[styles.instruction, styles.boldText, { fontSize: 60 }]}>{finalFeeling}</Text>
+                  <Text style={styles.instruction}>
+                    Identifying your feelings is an important step in regulating your emotions. Well done!
+                  </Text>
+                </>
+              )}
+            </View>
+            <View style={styles.buttonsContainer}>
+              {!selectedEmotion &&
+                Object.keys(emotions).map((emotion) => (
+                  <Pressable
+                    key={emotion}
+                    style={styles.button}
+                    onPress={() => handleEmotionSelect(emotion)}
+                  >
+                    <Text style={styles.buttonText}>{emotion}</Text>
+                  </Pressable>
+                ))}
+              {selectedEmotion && !selectedSubFeeling &&
+                Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
+                  (subFeeling) => (
+                    <Pressable
+                      key={subFeeling}
+                      style={styles.button}
+                      onPress={() => setSelectedSubFeeling(subFeeling)}
+                    >
+                      <Text style={styles.buttonText}>{subFeeling}</Text>
+                    </Pressable>
+                  )
                 )}
-              </View>
-              <View style={styles.buttonsContainer}>
-                {!selectedEmotion &&
-                  Object.keys(emotions).map((emotion) => (
-                    <Pressable
-                      key={emotion}
-                      style={styles.button}
-                      onPress={() => setSelectedEmotion(emotion)}
-                    >
-                      <Text style={styles.buttonText}>{emotion}</Text>
-                    </Pressable>
-                  ))}
-                {selectedEmotion && !selectedSubFeeling &&
-                  Object.keys(emotions[selectedEmotion as keyof typeof emotions]).map(
-                    (subFeeling) => (
-                      <Pressable
-                        key={subFeeling}
-                        style={styles.button}
-                        onPress={() => setSelectedSubFeeling(subFeeling)}
-                      >
-                        <Text style={styles.buttonText}>{subFeeling}</Text>
-                      </Pressable>
-                    )
-                  )}
-                {selectedSubFeeling && !finalFeeling &&
-                  emotions[selectedEmotion as keyof typeof emotions][
-                    selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
-                  ].map((deeperFeeling) => (
-                    <Pressable
-                      key={deeperFeeling}
-                      style={styles.button}
-                      onPress={() => setFinalFeeling(deeperFeeling)}
-                    >
-                      <Text style={styles.buttonText}>{deeperFeeling}</Text>
-                    </Pressable>
-                  ))}
-                {finalFeeling && (
-                  <View style={{alignContent:'center', }}>
-                    <View style={{marginTop:20, marginBottom:5}}>
-                      <Text style={[styles.instruction, {marginTop:0}]}>
-                        Click reset to change your answer or click continue.
-                      </Text>
-                    </View>
-                    <Pressable style={[styles.resetButton, {alignSelf:'center'}]} onPress={resetSelection}>
-                      <Text style={styles.buttonText}>Reset</Text>
-                    </Pressable>
+              {selectedSubFeeling && !finalFeeling &&
+                emotions[selectedEmotion as keyof typeof emotions][
+                  selectedSubFeeling as keyof typeof emotions[typeof selectedEmotion]
+                ].map((deeperFeeling) => (
+                  <Pressable
+                    key={deeperFeeling}
+                    style={styles.button}
+                    onPress={() => setFinalFeeling(deeperFeeling)}
+                  >
+                    <Text style={styles.buttonText}>{deeperFeeling}</Text>
+                  </Pressable>
+                ))}
+              {finalFeeling && (
+                <View style={{ alignContent: 'center' }}>
+                  <View style={{ marginTop: 20, marginBottom: 5 }}>
+                    <Text style={[styles.instruction, { marginTop: 0 }]}>
+                      Click reset to change your answer or click continue.
+                    </Text>
                   </View>
-                )}
-              </View>
+                  <Pressable
+                    style={[styles.resetButton, { alignSelf: 'center' }]}
+                    onPress={resetSelection}
+                  >
+                    <Text style={styles.buttonText}>Reset</Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
           </View>
         </View>
-      <View style={styles.rowContainer}>
-        <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
+        <View style={styles.rowContainer}>
+          <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
+        </View>
       </View>
     </View>
-  </View>
-);
-
+  );
 };
 
 const styles = StyleSheet.create({

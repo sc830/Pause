@@ -7,29 +7,29 @@
         Continue button navigates to the next screen.
 */
 
-import React, { useCallback,useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useRouter } from "expo-router";
 import TextBox from "@/components/TextBox";
 import ContinueButton from "@/components/ContinueButton";
 import AddButton from "@/components/AddButton";
-import Timer, { useTimerContext } from "../components/Timer"; 
+import Timer, { useTimerContext } from "../components/Timer";
 
 export function Gratitude() {
-  const router = useRouter(); // Hook for navigation
+  const router = useRouter();
   const [textInputs, setTextInputs] = useState<string[]>(["", "", ""]);
-  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
 
   const [timerKey, setTimerKey] = useState(0);
+
   // Reset timer state when screen is focused
   useFocusEffect(
     useCallback(() => {
       setTimerKey((prevKey) => prevKey + 1);
-      setTimerDuration(20); // Reset the global timer duration
       setIsTimerVisible(true); // Ensure the timer is visible
       setTimerEnded(false); // Reset the timerEnded state
-    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+    }, [setIsTimerVisible, setTimerEnded])
   );
 
   const handleAddTextBox = () => {
@@ -44,6 +44,7 @@ export function Gratitude() {
 
   const handleContinue = () => {
     console.log("Gratitude List:", textInputs);
+    console.log(`Timer duration was: ${timerDuration}s`); // Log timer duration for debugging
     router.push("/journalPage"); // Navigate to the Journal Page
   };
 
@@ -80,7 +81,7 @@ export function Gratitude() {
       </ScrollView>
 
       {/* Continue Button */}
-      <ContinueButton onPress={handleContinue} disabled={!timerEnded}/>
+      <ContinueButton onPress={handleContinue} disabled={!timerEnded} />
     </View>
   );
 }
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 40,
@@ -114,7 +115,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     alignItems: "center",
-    //paddingVertical: 10,
     paddingBottom: 100,
   },
   textBoxContainer: {
@@ -130,8 +130,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   addButton: {
-    marginTop: 5, // Add space between the last text box and the button
-    
+    marginTop: 5,
   },
 });
 

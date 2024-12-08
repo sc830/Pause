@@ -8,7 +8,7 @@
         Continue button is used to navigate to the next screen
 */
 
-import React, { useCallback, useState  } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
@@ -17,21 +17,22 @@ import Timer, { useTimerContext } from "../components/Timer";
 
 const Mindfulness: React.FC = () => {
   const router = useRouter();
-  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
 
   const [timerKey, setTimerKey] = useState(0);
+
   // Reset timer state when screen is focused
   useFocusEffect(
     useCallback(() => {
       setTimerKey((prevKey) => prevKey + 1);
-      setTimerDuration(20); // Reset the global timer duration
       setIsTimerVisible(true); // Ensure the timer is visible
       setTimerEnded(false); // Reset the timerEnded state
-    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+    }, [setIsTimerVisible, setTimerEnded])
   );
 
   const handleContinue = () => {
     console.log("User has completed mindfulness exercises.");
+    console.log(`Timer duration was: ${timerDuration}s`); // Log the timer duration for debugging
     router.push("/grounding"); // Navigate to the next page
   };
 

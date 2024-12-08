@@ -12,7 +12,6 @@ import { Text, View, Button,StyleSheet } from "react-native";
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-
 import StyledButton from '@/components/StyledButton';
 import MenuButton from "@/components/MenuButton";
 import SettingsButton from "@/components/SettingsButton";

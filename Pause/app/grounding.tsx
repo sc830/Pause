@@ -8,29 +8,35 @@
         - Continue button is used to navigate to the next screen.
 */
 
-import React, { useCallback,useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
-import TextBox from "../components/TextBox"; // Single import for TextBox
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { useRouter } from "expo-router";
+import TextBox from "../components/TextBox";
 import ContinueButton from "../components/ContinueButton";
 import Timer, { useTimerContext } from "../components/Timer";
 
 const Grounding: React.FC = () => {
-  const router = useRouter(); // Hook for navigation
-  const { timerEnded, setTimerEnded, setIsTimerVisible, setTimerDuration } = useTimerContext();
+  const router = useRouter();
+  const { timerEnded, setTimerEnded, setIsTimerVisible, timerDuration } = useTimerContext();
 
   const [timerKey, setTimerKey] = useState(0);
+
   // Reset timer state when screen is focused
   useFocusEffect(
     useCallback(() => {
       setTimerKey((prevKey) => prevKey + 1);
-      setTimerDuration(20); // Reset the global timer duration
       setIsTimerVisible(true); // Ensure the timer is visible
       setTimerEnded(false); // Reset the timerEnded state
-    }, [setTimerDuration, setIsTimerVisible, setTimerEnded])
+    }, [setIsTimerVisible, setTimerEnded])
   );
-
 
   const groundingQuestions = [
     "What is one thing that you can see in the space around you?",
@@ -55,6 +61,7 @@ const Grounding: React.FC = () => {
   // Handle Continue button press
   const handleContinue = () => {
     console.log("User Responses:", responses); // Log all responses
+    console.log(`Timer duration was: ${timerDuration}s`); // Log timer duration for debugging
     router.push("/gratitude"); // Navigate to the Gratitude page
   };
 
