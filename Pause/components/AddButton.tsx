@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Pressable } from "react-native";
 import plusIcon from "../assets/images/plus.png";
+import Colors from '@/constants/Colors';
 
 export default function AddButton(props: { onPress?: () => void }) {
   const { onPress } = props;
@@ -17,13 +18,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
     elevation: 3,
-    height: 50,
-    width: 50,
+    height: 60,
+    width: 60,
     margin: 10,
-    backgroundColor: "#4f7bbd",
+    backgroundColor: Colors.green,
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
   },
 });

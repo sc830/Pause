@@ -15,6 +15,8 @@ import DateButton from "@/components/DateButton";
 import SettingsButton from "@/components/SettingsButton";
 import JournalButton from "@/components/JournalButton";
 import MonthlyProgressButton from "@/components/MonthlyProgressButton";
+import Colors from '@/constants/Colors';
+import Values from '@/constants/Values';
 
 export default function LogsPage() {
   const [dates, setDates] = useState<string[]>([]); // Store dates
@@ -66,7 +68,7 @@ export default function LogsPage() {
           <DateButton
             date={item}
             onPress={() => console.log(`View activities for ${item}`)}
-            style={styles.dateButton}
+            style={[styles.dateButton, {backgroundColor:Colors.green, height:60, width:400, marginVertical:5}]}
           />
         )}
         contentContainerStyle={styles.dateButtonList}
@@ -80,24 +82,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.blue,
   },
   headerText: {
     fontSize: 40,
-    fontWeight: "bold",
+    fontWeight: 600,
     marginBottom: 20,
     marginTop: 40,
   },
   menuButton: {
     position: "absolute",
+    backgroundColor: Colors.green,
+    zIndex: 5,
     top: 20,
     left: 20,
   },
   dropdown: {
     position: "absolute",
+    zIndex: 3,
     top: 70,
     left: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.green,
     padding: 10,
     borderRadius: 8,
     shadowColor: "#000",

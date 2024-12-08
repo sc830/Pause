@@ -19,7 +19,7 @@ const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isTimerVisible, setIsTimerVisible] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(20); // Default timer duration
+  const [timerDuration, setTimerDuration] = useState(5); // Default timer duration
   const [timerEnded, setTimerEnded] = useState(false); // New state for timer end
 
   return (
@@ -58,7 +58,7 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
-    if (isTimerVisible && timeInSeconds > 0) {
+    if (timeInSeconds > 0) {
       timer = setInterval(() => {
         setTime((prev) => prev - 1);
       }, 1000);
@@ -74,10 +74,13 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
     };
   }, [isTimerVisible, timeInSeconds, setTimerEnded, onTimerEnd]);
 
-  if (!isTimerVisible) return null;
-
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { opacity: isTimerVisible ? 1 : 0 }, // Make it fully transparent but still rendered
+      ]}
+    >
       <Text style={styles.timerText}>{timeInSeconds}s</Text>
     </View>
   );

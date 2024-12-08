@@ -12,7 +12,7 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import ContinueButton from "../components/ContinueButton";
-import Timer, { useTimerContext } from "../components/Timer"; // Import Timer component and context
+import Timer, { useTimerContext } from "@/components/Timer"; // Import Timer component and context
 import Colors from '@/constants/Colors';
 import Values from '@/constants/Values';
 

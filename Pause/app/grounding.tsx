@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     fontSize: 40,
-    fontWeight: 600,
     borderRadius:Values.borderRadius, 
     borderColor:Colors.green, 
     borderWidth:0, 
@@ -101,8 +100,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   header: {
-    fontSize: 50,
-    fontWeight: "bold",
+    fontSize: 40,
+    fontWeight: 600,
     textAlign: "center",
     alignSelf: 'center',
   },

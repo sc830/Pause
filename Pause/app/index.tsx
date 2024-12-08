@@ -120,12 +120,12 @@ export default function Index() {
                   during each exercise. In the app settings, which you can access from the dropdown menu on the 
                   left of this page or after you've finished the check-in process, you can choose to manually
                   change the length of the timer (the minimum is 20 seconds) or use our variable timer feature, which automatically adjusts
-                  the "pause" to suit the emotion you select and how long it takes you to identify how you're feeling. You can always
-                  change the timer settings later, but they can't be changed in the middle of a check-in.
-                  This can help you slow down when you most need it.
+                  the "pause" to suit the emotion you select and how long it takes you to identify how you're feeling. You can also choose
+                  whether or not the timer is visible during the check-in. You can always change the timer settings later, but they can't be 
+                  changed in the middle of a check-in. This can help you slow down when you most need it.
                 </Text>
                 <Text style={[styles.tutorialText, { fontWeight:600, marginTop: 0, marginBottom: 60 }]}> 
-                  To adjust the timer before you start, click on the menu button in the top left corner of the screen  to reach the app settings.
+                  To adjust the timer settings before you start, click on the menu button in the top left corner of the screen  to reach the app settings.
                 </Text>
                 <View style={styles.tutorialHeadingContainer}>
                   <Text style={[styles.tutorialHeading, { }]}> The Check-In Process </Text>
