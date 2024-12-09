@@ -21,7 +21,7 @@ interface TimerContextProps {
 const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isTimerVisible, setIsTimerVisible] = useState(true);
+  const [isTimerVisible, setIsTimerVisible] = useState(false);
   const [timerDuration, setTimerDuration] = useState<number | null>(null); // Initialize without a default
   const [timerEnded, setTimerEnded] = useState(false);
   const [isVariableTimer, setIsVariableTimer] = useState(false); // Toggle between manual and variable
@@ -86,7 +86,8 @@ const Timer: React.FC<TimerProps> = ({ onTimerEnd }) => {
     <View
       style={[
         styles.container,
-        { opacity: isTimerVisible ? 1 : 0 }, // Make it fully transparent but still rendered
+        { opacity: isTimerVisible ? 1 : 0 },  // component mounts for timekeeping but invisible
+        { opacity: timeInSeconds>0 ? 1 : 0.5 },   // semi-transparent when allowed to continue
       ]}
     >
       <Text style={styles.timerText}>{timeInSeconds}s</Text>

@@ -31,14 +31,6 @@ const Grounding: React.FC = () => {
 
   const [timerKey, setTimerKey] = useState(0);
 
-  // Reset timer state when screen is focused
-  useFocusEffect(
-    useCallback(() => {
-      setTimerKey((prevKey) => prevKey + 1);
-      setIsTimerVisible(true); // Ensure the timer is visible
-      setTimerEnded(false); // Reset the timerEnded state
-    }, [setIsTimerVisible, setTimerEnded])
-  );
 
   const groundingQuestions = [
     "What is one thing that you can see in the space around you? Describe it.",

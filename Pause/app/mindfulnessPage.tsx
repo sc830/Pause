@@ -4,7 +4,6 @@
 
     Functions: 
         Prompts user with mindfulness question
-        Requires user input in TextBox
         Continue button is used to navigate to the next screen
 */
 
@@ -23,14 +22,6 @@ const Mindfulness: React.FC = () => {
 
   const [timerKey, setTimerKey] = useState(0);
 
-  // Reset timer state when screen is focused
-  useFocusEffect(
-    useCallback(() => {
-      setTimerKey((prevKey) => prevKey + 1);
-      setIsTimerVisible(true); // Ensure the timer is visible
-      setTimerEnded(false); // Reset the timerEnded state
-    }, [setIsTimerVisible, setTimerEnded])
-  );
 
   const handleContinue = () => {
     console.log("User has completed mindfulness exercises.");

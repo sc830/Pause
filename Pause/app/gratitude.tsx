@@ -29,8 +29,6 @@ export function Gratitude() {
   useFocusEffect(
     useCallback(() => {
       setTimerKey((prevKey) => prevKey + 1);
-      setIsTimerVisible(true); // Ensure the timer is visible
-      setTimerEnded(false); // Reset the timerEnded state
     }, [setIsTimerVisible, setTimerEnded])
   );
 
