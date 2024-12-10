@@ -9,7 +9,7 @@ Dynamic Timer: Automatically adjust the timer based on emotion intensity and tim
 Manual Timer: Allows users to input a custom timer duration.
 Mindfulness Activities: Guides users through grounding and gratitude exercises.
 Progress Logs: Track your emotional exploration and mindfulness progress over time.
-Customizable Settings: Toggle between dynamic and manual timers, and adjust timer settings.
+
 
 The application had been deployed using Firebase.
 1. Access the application here: https://pause.web.app/
