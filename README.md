@@ -17,7 +17,7 @@ The application had been deployed using Firebase.
 Email: jma352@txstate.edu
 Password: testUserPassword
 
-To run a local version of the application, you will have to run the following command in your terminal:
+To run a local version of the application, you will have to run the following commands in your terminal:
 
 1. Clone the Pause GitHub repository: git clone https://github.com/sc830/Pause.git
 2. Install the necessary packages: run "npm install " from the root directory. 
