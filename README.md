@@ -20,10 +20,11 @@ Password: testUserPassword
 To run a local version of the application, you will have to run the following commands in your terminal:
 
 1. Clone the Pause GitHub repository: git clone https://github.com/sc830/Pause.git
-2. Install the necessary packages: run "npm install " from the root directory. 
-3.  Install the necessary packages for Firebase hosting: run "npm install -g firebase-tools" in the root directory.
-4.  Run the application: run "firebase login" which will open a Google login in your web browser.
-5.  log in with:
+2. Pull from the Main branch.
+3. Install the necessary packages: run "npm install " from the root directory. 
+4.  Install the necessary packages for Firebase hosting: run "npm install -g firebase-tools" in the root directory.
+5.  Run the application: run "firebase login" which will open a Google login in your web browser.
+6.  log in with:
     Email: jma352@txstate.edu
     Password: testUserPassword
 
